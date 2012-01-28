@@ -1,14 +1,23 @@
 package
 {
+	import animation.EnemyAnimation;
+	import animation.PlayerAnimation;
+	import flash.display.Sprite;
 	import org.flixel.*;
-	[SWF(width="400", height="300", backgroundColor="#000000")]
+	import rufus.core.ILevel;
+	import rufus.levels.Level1;
+	
+	[SWF(width="1024", height="640", backgroundColor="#000000")]
 	[Frame(factoryClass="Preloader")]
 
-	public class Main extends FlxGame
+	public class Main extends Sprite
 	{
+		var game : FlxGame;
+		
 		public function Main()
 		{
-			super(400, 300, MenuState, 1, 20, 20);
+			game = new FlxGame(1024, 640, Level1, 1, 64, 64);
+			addChild(game);
 		}
 	}
 }
