@@ -18,6 +18,7 @@ package rufus.elements
 		
 		private var _allowArrows : Boolean = true;
 		private var _allowJump : Boolean = true;
+		private var _lockAnimation : Boolean = false;
 		
 		static public const JUMPING:String = "jumping";
 		static public const FALLING:String = "falling";
@@ -82,7 +83,7 @@ package rufus.elements
 			acceleration.x = 0;
 			
 			if (_allowArrows && Game.instance.endLevel == false) {
-				if(FlxG.keys.LEFT && (x > width))
+				if(FlxG.keys.LEFT && (x > 0))
 				{
 					facing = FlxObject.LEFT;
 					acceleration.x -= drag.x;
@@ -101,11 +102,14 @@ package rufus.elements
 				velocity.y = -300;
 			}
 			
+			if (_lockAnimation) {
+				return;
+			}
+			
 			// ANIMATION
 			if (velocity.y < 0)
 			{
 				play(JUMPING);
-				
 			} else if (velocity.y > 0)
 			{
 				play(FALLING);
@@ -121,10 +125,13 @@ package rufus.elements
 		}
 		
 		private function animationCallback(name : String, frame : uint, frameIndex: uint):void {
-			if (name == GET_ITEM) {
+			if (name == GET_ITEM || name == USE_ITEM) {
+				_lockAnimation = true;
 				_allowJump = _allowArrows = false;
-			} else if (name == USE_ITEM) {
-				_allowJump = _allowArrows = false;
+				if (frame == 4) {
+					_lockAnimation = false;
+				}
+			// } else if (  ) {
 			} else {
 				_allowArrows = true;
 				_allowJump = true;

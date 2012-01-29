@@ -24,6 +24,7 @@ package rufus.core
 	import rufus.elements.Box;
 	import rufus.elements.BoxMetal;
 	import rufus.elements.BoxWood;
+	import rufus.elements.Carrot;
 	import rufus.elements.Enemy;
 	import rufus.elements.Mushroom;
 	import rufus.elements.Player;
@@ -105,8 +106,15 @@ package rufus.core
 			//backgroundNight.pixels.dispose();
 			//backgroundNight.pixels = newPix;
 			
-			// Update all GameObjects
 			
+			if (Game.instance.carrots > 0 && FlxG.keys.ENTER) {
+				Game.instance.carrots -= 1;
+				addElement(Carrot, );
+				player.play(USE_ITEM);
+			}
+			
+			
+			// Update all GameObjects
 			for (var i:uint = 0; i < gameObjects.length; i++) {
 				gameObjects[i].update();
 			}
@@ -140,7 +148,7 @@ package rufus.core
 					//trace("Callback for '" + className + "' not defined.");
 				}
 			}
-			// FlxG.collide();
+			FlxG.collide();
 		}
 		
 		override public function create():void
@@ -253,8 +261,10 @@ package rufus.core
 		
 		private function onCollideCarrot(p:FlxSprite, obj:FlxSprite) : void
 		{
-			p.play(Player.GET_ITEM);
+			player.play(Player.GET_ITEM);
 			obj.solid = false;
+			
+			Game.instance.carrots += 1;
 			
 			TweenLite.to(obj, 0.5, { 
 				y: "-20", 

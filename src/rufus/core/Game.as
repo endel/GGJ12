@@ -20,6 +20,7 @@ package rufus.core
 		private var currentLevel : uint = 0;
 		private var levels : Vector.<Class>;
 		private var score : uint = 0;
+		private var _carrots : uint = 0;
 		private var _levelScore : uint = 0;
 		public var accelerationY : uint = 500;
 		
@@ -76,6 +77,16 @@ package rufus.core
 		public function set endLevel(value:Boolean):void 
 		{
 			_endLevel = value;
+		}
+		
+		public function get carrots():uint 
+		{
+			return _carrots;
+		}
+		
+		public function set carrots(value:uint):void 
+		{
+			_carrots = value;
 		}
 		
 	}

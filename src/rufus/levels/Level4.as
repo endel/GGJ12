@@ -2,6 +2,7 @@ package rufus.levels
 {
 	import rufus.core.ILevel;
 	import rufus.core.Level;
+	import rufus.elements.Carrot;
 	import rufus.elements.Enemy;
 	import rufus.elements.Mushroom;
 	/**
@@ -15,9 +16,10 @@ package rufus.levels
 		
 		override public function setup() : void 
 		{
-			setPlayer(500, 400);
-			addElement( Mushroom, 400, 400 );
-			addElement(Enemy, 200, 200);
+			setPlayer(20, 500);
+			addElement(Carrot, 320, 500);
+			addElement(Enemy, 600, 500);
+			addElement(Mushroom, 950, 500);
 		}
 		
 		override public function getTilemap() : String

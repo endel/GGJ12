@@ -17,7 +17,7 @@ package rufus.levels
 		{
 			setPlayer(20, 400);
 			addElement(Mushroom, 980, 340);
-			addElement(Enemy, 498, 510);
+			addElement(Enemy, 498, 500);
 		}
 		
 		override public function getTilemap() : String

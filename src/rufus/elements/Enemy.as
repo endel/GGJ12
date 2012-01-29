@@ -1,7 +1,9 @@
 package rufus.elements 
 {
 	import animation.EnemyAnimation;
+	import org.flixel.FlxObject;
 	import org.flixel.FlxPath;
+	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import rufus.core.Game;
 	import rufus.core.GameObject;
@@ -29,8 +31,8 @@ package rufus.elements
 		static public const DEMON_GROWLING:String = "demonGrowling";
 		
 		// -> Usando FlxPath: https://github.com/AdamAtomic/FlxCollisions/blob/master/src/PlayState.as
-		private var _path : FlxPath;
 		private var _animation : EnemyAnimation;
+		private var _followPath : FlxPath;
 		private var swapping:Boolean;
 		
 		public function Enemy() 
@@ -70,7 +72,10 @@ package rufus.elements
 			
 			addAnimationCallback( animationCallback );
 			
-			play(DEMON_IDLE);
+			/*var pathFrom : FlxPoint = getMidpoint();
+			pathFrom.x += 50;
+			_followPath = new FlxPath([pathFrom, getMidpoint()]);
+			followPath(_followPath, 40, FlxObject.PATH_YOYO);*/
 		}
 		
 		private function animationCallback(name : String, frame : uint, frameIndex: uint):void {
