@@ -32,6 +32,7 @@ package rufus.core
 		override public function update() : void
 		{
 			super.update();
+			
 			if (this.collisionMap) {
 				// Apply collision of collisionMap is set
 				FlxG.collide(this, this.collisionMap);

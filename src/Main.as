@@ -9,7 +9,7 @@ package
 	import rufus.core.ILevel;
 	import rufus.levels.Level1;
 	
-	[SWF(width="1024", height="640", backgroundColor="#000000")]
+	[SWF(width="1024", height="600", backgroundColor="#000000")]
 	[Frame(factoryClass = "Preloader")]
 	
 
@@ -77,7 +77,7 @@ package
 			//contentDia.mask = _mask;
 			//contentDia.cacheAsBitmap = true;
 			
-			game = new FlxGame(1024, 640, Level1, 1, 64, 64);
+			game = new FlxGame(1024, 600, Level1, 1, 64, 64);
 			addChild(game);
 			
 			//addChild(contentTextura)

@@ -3,6 +3,10 @@ package rufus.core
 	import org.flixel.FlxG;
 	import rufus.levels.Level1;
 	import rufus.levels.Level2;
+	import rufus.levels.Level3;
+	import rufus.levels.Level4;
+	import rufus.levels.Level5;
+	import rufus.levels.Level6;
 	/**
 	 * ...
 	 * @author Endel Dreyer, Jefferson Ramos
@@ -12,6 +16,7 @@ package rufus.core
 		private static var _instance : Game = null;
 		private static const secret:Number = Math.random();
 		
+		private var _endLevel : Boolean = false;
 		private var currentLevel : uint = 0;
 		private var levels : Vector.<Class>;
 		private var score : uint = 0;
@@ -33,6 +38,10 @@ package rufus.core
 			levels = new Vector.<Class>();
 			levels.push( Level1 );
 			levels.push( Level2 );
+			levels.push( Level3 );
+			levels.push( Level4 );
+			levels.push( Level5 );
+			levels.push( Level6 );
 		}
 		
 		public function gotoNextLevel() : void {
@@ -40,7 +49,13 @@ package rufus.core
 			levelScore = 0;
 			
 			currentLevel += 1;
-			FlxG.switchState( new levels[currentLevel]() );
+			Game.instance.endLevel = false;
+			try {
+				FlxG.switchState( new levels[currentLevel]() );
+			} catch (e:Error) {
+				currentLevel = 0;
+				FlxG.switchState( new levels[currentLevel]() );
+			}
 		}
 		
 		public function get levelScore():uint 
@@ -51,6 +66,16 @@ package rufus.core
 		public function set levelScore(value:uint):void 
 		{
 			_levelScore = value;
+		}
+		
+		public function get endLevel():Boolean 
+		{
+			return _endLevel;
+		}
+		
+		public function set endLevel(value:Boolean):void 
+		{
+			_endLevel = value;
 		}
 		
 	}

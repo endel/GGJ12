@@ -2,6 +2,7 @@ package rufus.core
 {
 	import com.greensock.easing.Quad;
 	import com.greensock.TweenLite;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.utils.Dictionary;
 	import org.flixel.FlxG;
@@ -28,7 +29,7 @@ package rufus.core
 	public class Level extends FlxState implements ILevel
 	{
 		// Tileset that works with AUTO mode (best for thin walls)
-		[Embed(source="../../../res/terraTiles4.png")]
+		[Embed(source="../../../res/terraTiles5.png")]
 		protected static var tiles:Class;
 		
 		// Some static constants for the size of the tilemap tiles
@@ -83,21 +84,32 @@ package rufus.core
 		
 		protected function loadTilemap(tilemap:String):void
 		{
-			collisionMap.loadMap(tilemap, tiles, TILE_WIDTH, TILE_HEIGHT, FlxTilemap.AUTO);
+			collisionMap.loadMap(tilemap, tiles, TILE_WIDTH, TILE_HEIGHT, FlxTilemap.OFF);
 		}
 		
 		override public function update():void
 		{
 			// Update all GameObjects
 			for (var i:uint = 0; i < gameObjects.length; i++) {
-				if (!gameObjects[i]) {
-					trace("Sprite destroído!!!!!");
-				}
 				gameObjects[i].update();
 			}
 			
 			hud.update();
 			super.update();
+			
+			// Swap enemy state
+			if (collisionGroups["Enemy"]) {
+				(collisionGroups["Enemy"] as FlxGroup).members.every(function(flx) {
+					var enemy : Enemy = flx as Enemy;
+					// enemy.
+					
+					if (player.x - player.width < enemy.x) {
+						enemy.state = (player.facing == FlxObject.RIGHT) ? Enemy.STATE_ANGEL : Enemy.STATE_DEMON;
+					} else if ( player.x > enemy.x + enemy.width ) {
+						enemy.state = (player.facing == FlxObject.LEFT) ? Enemy.STATE_ANGEL : Enemy.STATE_DEMON;
+					}
+				});
+			}
 			
 			for (var className:String in collisionGroups)
 			{
@@ -111,7 +123,7 @@ package rufus.core
 					//trace("Callback for '" + className + "' not defined.");
 				}
 			}
-			FlxG.collide();
+			// FlxG.collide();
 		}
 		
 		override public function create():void
@@ -167,7 +179,10 @@ package rufus.core
 		
 		private function onCollideMushroom(p:FlxSprite, obj:FlxSprite) : void
 		{
+			Game.instance.endLevel = true;
 			Game.instance.levelScore += 1;
+			player.allowArrows = false;
+			player.allowJump = false;
 			
 			obj.solid = false;
 			TweenLite.to(obj, 0.5, { 
@@ -178,6 +193,7 @@ package rufus.core
 					TweenLite.to(obj, 0.5, {
 						alpha: 0,
 						onComplete: function() : void {
+							Game.instance.gotoNextLevel();
 							obj.kill();
 						}
 					})

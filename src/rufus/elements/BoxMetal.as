@@ -18,9 +18,9 @@ package rufus.elements
 			drag.x = 500;
 			
 			width = 54;
-			height = 54;
+			height = 48;
 			offset.x = 0;
-			offset.y = 0;
+			offset.y = 6;
 			
 			//basic sprite physics
 			acceleration.y = 420;
