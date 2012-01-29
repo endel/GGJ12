@@ -12,17 +12,19 @@ package rufus.elements
 		public function BoxMetal() 
 		{
 			setStaticGraphic(bitmap, 64, 64);
-			sprite.solid = true;
-			sprite.mass = 100;
+			solid = true;
+			mass = 100;
 			
-			sprite.drag.x = 500;
+			drag.x = 500;
 			
-			sprite.offset.x = -8;
-			sprite.offset.y = -8;
+			width = 54;
+			height = 54;
+			offset.x = 0;
+			offset.y = 0;
 			
 			//basic sprite physics
-			sprite.acceleration.y = 420;
-			sprite.maxVelocity.y = 400;
+			acceleration.y = 420;
+			maxVelocity.y = 400;
 		}
 		
 	}

@@ -19,8 +19,7 @@ package rufus.elements
 		public function Carrot() 
 		{
 			setStaticGraphic(bitmap, 127, 107);
-			//sprite.acceleration.y = 420;
-			sprite.immovable = true;
+			immovable = true;
 		}
 		
 	}

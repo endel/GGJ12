@@ -30,7 +30,7 @@ package rufus.core
 		
 		public function update():void 
 		{
-			scoreTxt.text = Player.SCORE.toString();
+			scoreTxt.text = Game.instance.levelScore.toString();
 		}
 	}
 

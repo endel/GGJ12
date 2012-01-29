@@ -20,7 +20,6 @@ package rufus.elements
 			
 			setStaticGraphic(ImageManipulation.copyBitmap(_animation.content), _animation.width, _animation.height);
 			sprite.immovable = true;
-			
 		}
 		
 	}

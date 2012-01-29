@@ -13,15 +13,17 @@ package rufus.elements
 		public function BoxWood()
 		{
 			setStaticGraphic(bitmap, 64, 64);
-			sprite.solid = true;
+			solid = true;
 			
-			sprite.drag.x = 200;
+			drag.x = 200;
 			
-			sprite.offset.x = -8;
-			sprite.offset.y = -8;
+			width = 54;
+			height = 54;
+			offset.x = 0;
+			offset.y = 0;
 			
 			//basic sprite physics
-			sprite.acceleration.y = Game.instance.accelerationY;
+			acceleration.y = Game.instance.accelerationY;
 		}
 		
 	}

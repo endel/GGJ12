@@ -17,8 +17,9 @@ package animation
 		static public const IDLE:String = "idle";
 		static public const WALK:String = "walk";
 		
-		public function EnemyAnimation() 
+		public function EnemyAnimation(width : uint, height : uint) 
 		{
+			super(width, height);
 			_spriteSheet = new SpriteSheetData();
 			_spriteSheet.appendAnimation(new MovieClipToBitmapModel(new HellHound, 0));
 			_spriteSheet.createSpriteSheet(120, 100, .3, 20);			

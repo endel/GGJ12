@@ -119,7 +119,7 @@ package jframe.graphics
 						x += frameWidth;
 					}
 					currentFrame += incressFrame;
-					trace( "currentFrame : " + currentFrame );
+					//trace( "currentFrame : " + currentFrame );
 				}
 				bmp.unlock();
 				outputBitmapDatas.push(bmp);
