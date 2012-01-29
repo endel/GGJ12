@@ -12,7 +12,7 @@ package rufus.levels
 	 */
 	public class Level2 extends Level implements ILevel
 	{
-		[Embed(source="../../../res/tilemaps/lvl2data.txt", mimeType = 'application/octet-stream')]
+		[Embed(source="../../../res/tilemaps/meumap2.txt", mimeType = 'application/octet-stream')]
 		private static var tilemap : Class;
 		
 		override public function setup() : void 

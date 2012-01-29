@@ -16,8 +16,8 @@ package rufus.levels
 		override public function setup() : void 
 		{
 			setPlayer(500, 400);
-			addElement( Mushroom, 400, 400 );
-			addElement(Enemy, 200, 200);
+			addElement( Mushroom, 0, 400 );
+			addElement(Enemy, 900, 200);
 		}
 		
 		override public function getTilemap() : String
