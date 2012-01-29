@@ -4,6 +4,7 @@ package rufus.core
 	import com.greensock.TweenLite;
 	import flash.events.Event;
 	import flash.utils.Dictionary;
+	import mx.core.FlexSprite;
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
@@ -13,6 +14,7 @@ package rufus.core
 	import org.flixel.FlxText;
 	import org.flixel.FlxTilemap;
 	import org.flixel.FlxU;
+	import rufus.elements.Background;
 	import rufus.elements.Box;
 	import rufus.elements.BoxMetal;
 	import rufus.elements.BoxWood;
@@ -44,8 +46,11 @@ package rufus.core
 		
 		protected var collisionCallbacks:Object = new Object();
 		
+		
 		protected function setPlayer(x:uint, y:uint):void
 		{
+			
+			//setStaticGraphic(bitmap, 64, 64);
 			player = new Player();
 			player.sprite.x = x;
 			player.sprite.y = y;
@@ -106,7 +111,7 @@ package rufus.core
 				}
 				else
 				{
-					trace("Callback for '" + className + "' not defined.");
+					//trace("Callback for '" + className + "' not defined.");
 				}
 			}
 			FlxG.collide();
@@ -116,7 +121,7 @@ package rufus.core
 		{
 			FlxG.framerate = 50;
 			FlxG.flashFramerate = 50;
-			
+			addElement(Background, 0, 0);
 			collisionMap = new FlxTilemap();
 			loadTilemap(this.getTilemap());
 			add(collisionMap);
@@ -193,7 +198,7 @@ package rufus.core
 				onComplete: function() : void {
 					TweenLite.to(obj, 0.5, {
 						alpha: 0,
-						onComplete: function() {
+						onComplete: function():void {
 							obj.kill();
 						}
 					})

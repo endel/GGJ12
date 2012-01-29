@@ -1,7 +1,10 @@
 package rufus.levels
 {
+	import flash.display.Bitmap;
+	import org.flixel.FlxG;
 	import rufus.core.ILevel;
 	import rufus.core.Level;
+	import rufus.elements.Background;
 	import rufus.elements.BoxMetal;
 	import rufus.elements.BoxWood;
 	import rufus.elements.Carrot;
@@ -12,11 +15,14 @@ package rufus.levels
 	 */
 	public class Level1 extends Level implements ILevel
 	{
-		[Embed(source="../../../res/tilemaps/level1.txt", mimeType = 'application/octet-stream')]
+		[Embed(source="../../../res/tilemaps/level1.txt", mimeType = 'application/octet-stream')]		
 		private static var tilemap : Class;
 		
 		override public function setup() : void 
 		{
+			
+			//FlxG.stage.setChildIndex(back, 0);
+			
 			setPlayer(400, 20);
 			addElement(Mushroom, 580, 400);
 			

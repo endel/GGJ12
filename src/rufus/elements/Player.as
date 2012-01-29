@@ -129,7 +129,7 @@ package rufus.elements
 			sprite.drawDebug();
 		}
 		
-		function animationCallback(name : String, frame : uint, frameIndex: uint) {
+		private function animationCallback(name : String, frame : uint, frameIndex: uint):void {
 			if (name == GET_ITEM) {
 				_allowJump = _allowArrows = false;
 			} else if (name == USE_ITEM) {
