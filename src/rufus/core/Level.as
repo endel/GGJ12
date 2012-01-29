@@ -184,7 +184,12 @@ package rufus.core
 		private function onCollideEnemy(p:FlxSprite, obj:FlxSprite) : void
 		{
 			if ( (obj as Enemy).state == Enemy.STATE_DEMON ) {
+				obj.allowCollisions = FlxObject.NONE;
 				// Kill the player
+				p.allowCollisions = FlxObject.FLOOR;
+				FlxG.fade(0x0, 0.5, function():void {
+					Game.instance.restartLevel();
+				});
 			}
 		}
 		
