@@ -19,11 +19,11 @@ package rufus.levels
 		override public function setup() : void 
 		{
 			setPlayer(20, 500);
-			addElement(BoxWood, 200, 400);
-			addElement(BoxMetal, 100, 400);
+			//addElement(BoxWood, 200, 400);
+			//addElement(BoxMetal, 100, 400);
 			addElement(Carrot, 320, 490);
 			addElement(Enemy, 600, 400);
-			addElement(Mushroom, 950, 500);
+			addElement(Mushroom, 950, 450);
 		}
 		
 		override public function getTilemap() : String

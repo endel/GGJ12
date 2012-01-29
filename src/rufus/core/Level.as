@@ -141,8 +141,8 @@ package rufus.core
 			FlxG.flashFramerate = 50;
 			FlxG.bgColor = 0xffffffff
 			
-			FlxG.debug = true;
-			FlxG.visualDebug = true;
+			//FlxG.debug = true;
+			//FlxG.visualDebug = true;
 			
 			collisionMap = new FlxTilemap();
 			loadTilemap(this.getTilemap());

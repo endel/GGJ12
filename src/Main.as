@@ -84,7 +84,7 @@ package
 			//contentDia.cacheAsBitmap = true;
 			SomManager.changeSoundAmbiente(SomManager.SOM_AMBIENTE);
 			SomManager.playSoundAmbiente();
-			game = new FlxGame(1024, 600, Level4, 1, 64, 64);
+			game = new FlxGame(1024, 600, Level1, 1, 64, 64);
 			addChild(game);
 			
 			//var _mask:Sprite = new Sprite();
