@@ -42,15 +42,16 @@ package rufus.core
 			
 			levels = new Vector.<Class>();
 			levels.push( Menu );
+			
 			levels.push( Level1 );
 			levels.push( Level2 );
-			levels.push( Level3 );
+			//levels.push( Level3 );
 			levels.push( Level4 );
 			//levels.push( Level5 );
-			levels.push( Level6 );
-			levels.push( Level7 );
-			levels.push( Level8 );
-			levels.push( Level9 );
+			//levels.push( Level6 );
+			//levels.push( Level7 );
+			//levels.push( Level8 );
+			//levels.push( Level9 );
 		}
 		
 		public function gotoNextLevel() : void {

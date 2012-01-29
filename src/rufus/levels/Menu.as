@@ -40,7 +40,7 @@ package rufus.levels
 		{
 			trace( "onClick : " + onClick );
 			FlxG.stage.removeEventListener(MouseEvent.CLICK, onClick)
-				Game.instance.gotoNextLevel();
+			Game.instance.gotoNextLevel();
 		}
 		
 	}

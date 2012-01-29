@@ -13,17 +13,17 @@ package rufus.levels
 	 */
 	public class Level4 extends Level implements ILevel
 	{
-		[Embed(source="../../../res/tilemaps/lvl4data.txt", mimeType = 'application/octet-stream')]
+		[Embed(source="../../../res/tilemaps/meumap4.txt", mimeType = 'application/octet-stream')]
 		private static var tilemap : Class;
 		
 		override public function setup() : void 
 		{
-			setPlayer(20, 500);
-			addElement(BoxWood, 200, 400);
+			setPlayer(20, 20);
+			addElement(BoxWood, 80, 20);
 			//addElement(BoxMetal, 100, 400);
-			addElement(Carrot, 320, 490);
-			addElement(Enemy, 600, 400);
-			addElement(Mushroom, 950, 250);
+			//addElement(Carrot, 320, 490);
+			addElement(Enemy, 500, 400);
+			addElement(Mushroom, 950, 50);
 		}
 		
 		override public function getTilemap() : String

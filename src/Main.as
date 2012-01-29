@@ -12,6 +12,7 @@ package
 	import rufus.levels.Level3;
 	import rufus.levels.Level4;
 	import rufus.levels.Level5;
+	import rufus.levels.Level9;
 	import rufus.levels.Menu;
 	
 	[SWF(width="1024", height="600", backgroundColor="#000000")]
@@ -87,7 +88,7 @@ package
 			//contentDia.cacheAsBitmap = true;
 			SomManager.changeSoundAmbiente(SomManager.SOM_AMBIENTE);
 			SomManager.playSoundAmbiente();
-			game = new FlxGame(1024, 600, Menu, 1, 64, 64);
+			game = new FlxGame(1024, 600, Level9, 1, 64, 64);
 			addChild(game);
 			
 			//var _mask:Sprite = new Sprite();
