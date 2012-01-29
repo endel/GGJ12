@@ -2,6 +2,7 @@ package rufus.elements
 {
 	import animation.PlayerAnimation;
 	import flash.events.Event;
+	import jframe.sound.SomManager;
 	import org.flixel.*;
 	import rufus.core.Game;
 	import rufus.core.GameObject;
@@ -87,15 +88,18 @@ package rufus.elements
 			acceleration.x = 0;
 			
 			if (_allowArrows && Game.instance.endLevel == false) {
+				
 				if(FlxG.keys.LEFT && (x > 0))
 				{
 					facing = FlxObject.LEFT;
 					acceleration.x -= drag.x;
+					
 				}
 				else if(FlxG.keys.RIGHT && (x < FlxG.width - width))
 				{
 					facing = FlxObject.RIGHT;
 					acceleration.x += drag.x;
+					//SomManager.playSound(SomManager.WALK)
 				}
 			}
 			
@@ -150,6 +154,11 @@ package rufus.elements
 		}
 		
 		private function animationCallback(name : String, frame : uint, frameIndex: uint):void {
+			if (name == RUNNING) {
+				if (frame == 2) {
+				SomManager.playSound(SomManager.WALK)
+				}
+			}
 			if (name == GET_ITEM || name == USE_ITEM) {
 				this.lock();
 				if (frame == 4) {
