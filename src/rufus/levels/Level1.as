@@ -5,6 +5,7 @@ package rufus.levels
 	import rufus.elements.BoxMetal;
 	import rufus.elements.BoxWood;
 	import rufus.elements.Carrot;
+	import rufus.elements.Enemy;
 	import rufus.elements.Mushroom;
 	/**
 	 * ...
@@ -23,6 +24,7 @@ package rufus.levels
 			addElement(BoxMetal, 50, 450);
 			addElement(BoxWood, 200, 450);
 			addElement(Carrot, 300, 400);
+			addElement(Enemy, 200, 200);
 		}
 		
 		override public function getTilemap() : String

@@ -16,6 +16,7 @@ package rufus.core
 	import rufus.elements.Box;
 	import rufus.elements.BoxMetal;
 	import rufus.elements.BoxWood;
+	import rufus.elements.Enemy;
 	import rufus.elements.Mushroom;
 	import rufus.elements.Player;
 	
@@ -47,18 +48,17 @@ package rufus.core
 		protected function setPlayer(x:uint, y:uint):void
 		{
 			player = new Player();
-			player.sprite.x = x;
-			player.sprite.y = y;
+			player.x = x;
+			player.y = y;
 			player.addToContainer(this, collisionMap);
-			player.addEventListener(Player.EVENT_NEXT_LEVEL, gotoNextLevel);
 			gameObjects.push(player);
 		}
 		
 		public function addElement(element:Class, x:uint, y:uint, ignoreCollision:Boolean = false):void
 		{
 			var el:GameObject = new element();
-			el.sprite.y = y;
-			el.sprite.x = x;
+			el.y = y;
+			el.x = x;
 			el.addToContainer(this, collisionMap);
 			gameObjects.push(el);
 			
@@ -75,7 +75,7 @@ package rufus.core
 				{
 					flxGroup = collisionGroups[className];
 				}
-				flxGroup.add(el.sprite);
+				flxGroup.add(el);
 			}
 		}
 		
@@ -88,7 +88,7 @@ package rufus.core
 		{
 			// Update all GameObjects
 			for (var i:uint = 0; i < gameObjects.length; i++) {
-				if (!gameObjects[i].sprite) {
+				if (!gameObjects[i]) {
 					trace("Sprite destroído!!!!!");
 				}
 				gameObjects[i].update();
@@ -102,7 +102,7 @@ package rufus.core
 				// trace(className);
 				if (collisionCallbacks[className])
 				{
-					FlxG.collide(player.sprite, collisionGroups[className], collisionCallbacks[className]);
+					FlxG.collide(player, collisionGroups[className], collisionCallbacks[className]);
 				}
 				else
 				{
@@ -117,6 +117,9 @@ package rufus.core
 			FlxG.framerate = 50;
 			FlxG.flashFramerate = 50;
 			
+			FlxG.debug = true;
+			FlxG.visualDebug = true;
+			
 			collisionMap = new FlxTilemap();
 			loadTilemap(this.getTilemap());
 			add(collisionMap);
@@ -125,7 +128,8 @@ package rufus.core
 				Mushroom: onCollideMushroom,
 				BoxWood: onCollideBoxWood,
 				BoxMetal: onCollideBoxMetal,
-				Carrot: onCollideCarrot
+				Carrot: onCollideCarrot,
+				Enemy: onCollideEnemy
 			};
 			
 			hud = new HUD(this);
@@ -149,6 +153,14 @@ package rufus.core
 		/*
 		 * Callbacks
 		 */
+		
+		private function onCollideEnemy(p:FlxSprite, obj:FlxSprite) : void
+		{
+			if ( (obj as Enemy).state == Enemy.STATE_DEMON ) {
+				// Kill the player
+			}
+		}
+		
 		private function onCollideMushroom(p:FlxSprite, obj:FlxSprite) : void
 		{
 			Game.instance.levelScore += 1;
@@ -176,9 +188,14 @@ package rufus.core
 		
 		private function onCollideBoxMetal(p:FlxSprite, obj:FlxSprite) : void
 		{
-			if (obj.velocity.y > 5) {
-				// Kill the player!
+			if (p.ID == Player.ID) {
+				obj.immovable = true;
+				obj.solid = true;
+				if (obj.velocity.y > 5) {
+					// Kill the player!
+				}
 			}
+
 		}
 		
 		private function onCollideCarrot(p:FlxSprite, obj:FlxSprite) : void
@@ -201,10 +218,6 @@ package rufus.core
 			});
 		}
 		
-		private function gotoNextLevel(e:Event):void
-		{
-			Game.instance.gotoNextLevel();
-		}
 	}
 
 }

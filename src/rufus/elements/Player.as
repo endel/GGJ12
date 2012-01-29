@@ -13,6 +13,7 @@ package rufus.elements
 	
 	public class Player extends GameObject
 	{
+		static public const ID:uint = 100;
 		private var _animation : PlayerAnimation;
 		private var _allowArrows : Boolean = true;
 		private var _allowJump : Boolean = true;
@@ -31,102 +32,97 @@ package rufus.elements
 		{
 			_animation = new PlayerAnimation(120, 120);
 			
-			width = _animation.width;
-			height = _animation.height;
+			loadGraphicAsBitmap(_animation.content, true, true, _animation.width, _animation.height);
+			scale = new FlxPoint( -1, 1);
+			ID = ID;
 			
-			sprite = new FlxSprite(_animation.content.width, _animation.content.height);
-			sprite.loadGraphic(_animation.content, true, true, width, height);
-			sprite.scale = new FlxPoint( -1, 1);
-			
-			sprite.mass = 1;
+			mass = 1;
 			
 			//bounding box tweaks
-			sprite.width = width - 60;
-			sprite.height = height;
-			sprite.offset.x = 20;
-			sprite.offset.y = -30;
+			width = _animation.width - 60;
+			height = _animation.height - 60;
+			offset.x = 26;
+			offset.y = 26;
 			
 			//basic sprite physics
-			sprite.drag.x = 1800;
-			sprite.acceleration.y = Game.instance.accelerationY;
-			sprite.maxVelocity.x = 200;
-			sprite.maxVelocity.y = 500;
-			//sprite.velocity.x = 50;
+			drag.x = 1800;
+			acceleration.y = Game.instance.accelerationY;
+			maxVelocity.x = 200;
+			maxVelocity.y = 500;
+			//velocity.x = 50;
 			
 			//animations
-			sprite.addAnimation(IDLE, [32, 33, 34, 35, 36, 37, 38, 39, 38, 37, 36, 35, 34, 33], 12);
+			addAnimation(IDLE, [32, 33, 34, 35, 36, 37, 38, 39, 38, 37, 36, 35, 34, 33], 12);
 			
-			sprite.addAnimation(RUNNING, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 30);
+			addAnimation(RUNNING, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 30);
 			
 			// 40 - 53: Saindo do chão
-			sprite.addAnimation(JUMPING, [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53], 18, false);
+			addAnimation(JUMPING, [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53], 18, false);
 			
 			// 53 - 60: Caindo no chão
-			sprite.addAnimation(FALLING, [53, 54, 55, 56, 57, 58, 59, 60], 18, false);
+			addAnimation(FALLING, [53, 54, 55, 56, 57, 58, 59, 60], 18, false);
 
 			// 60 - 65: Chegando ao solo
 			
 			// 66 - 70: Pegando item
-			sprite.addAnimation(GET_ITEM, [66, 67, 68, 69, 70], 18, false);
+			addAnimation(GET_ITEM, [66, 67, 68, 69, 70], 18, false);
 			
 			// 71 - 75: Soltando item
-			sprite.addAnimation(USE_ITEM, [71, 72, 73, 74, 75], 18, false);
+			addAnimation(USE_ITEM, [71, 72, 73, 74, 75], 18, false);
 			
-			sprite.addAnimationCallback(animationCallback);
+			addAnimationCallback(animationCallback);
 		}
 		
-		override public function update():void 
+		override public function update() : void 
 		{
 			super.update();
 			
 			//MOVEMENT
-			sprite.acceleration.x = 0;
+			acceleration.x = 0;
 			
-			if (sprite.x > (FlxG.width - width)) {
-				dispatchEvent( new Event(EVENT_NEXT_LEVEL) );
+			if (x > (FlxG.width - width)) {
+				Game.instance.gotoNextLevel();
 			}
 			
 			if (_allowArrows) {
 				if(FlxG.keys.LEFT)
 				{
-					sprite.facing = FlxObject.LEFT;
-					sprite.acceleration.x -= sprite.drag.x;
+					facing = FlxObject.LEFT;
+					acceleration.x -= drag.x;
 				}
 				else if(FlxG.keys.RIGHT)
 				{
-					sprite.facing = FlxObject.RIGHT;
-					sprite.acceleration.x += sprite.drag.x;
+					facing = FlxObject.RIGHT;
+					acceleration.x += drag.x;
 				}
 			}
 			
-			
 			// Jump, jump
-			if(_allowJump && ((FlxG.keys.justPressed("UP") || FlxG.keys.SPACE) && sprite.velocity.y == 0))
+			if(_allowJump && ((FlxG.keys.justPressed("UP") || FlxG.keys.SPACE) && velocity.y == 0))
 			{
-				
-				sprite.y -= 1;
-				sprite.velocity.y = -200;
+				y -= 1;
+				velocity.y = -300;
 			}
 			
 			// ANIMATION
-			if (sprite.velocity.y < 0)
+			if (velocity.y < 0)
 			{
-				sprite.play(JUMPING);
+				play(JUMPING);
 				
-			} else if (sprite.velocity.y > 0)
+			} else if (velocity.y > 0)
 			{
-				sprite.play(FALLING);
+				play(FALLING);
 			}
-			else if(sprite.velocity.x == 0)
+			else if(velocity.x == 0)
 			{
-				sprite.play(IDLE);
+				play(IDLE);
 			}
 			else
 			{
-				sprite.play(RUNNING);
+				play(RUNNING);
 			}
 			
-			sprite.drawDebug();
+			drawDebug();
 		}
 		
 		function animationCallback(name : String, frame : uint, frameIndex: uint) {

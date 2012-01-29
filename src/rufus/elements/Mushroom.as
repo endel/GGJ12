@@ -14,7 +14,7 @@ package rufus.elements
 		public function Mushroom() 
 		{
 			setStaticGraphic(bitmap, 43, 50);
-			sprite.immovable = true;
+			immovable = true;
 		}
 		
 	}

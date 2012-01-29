@@ -1,6 +1,7 @@
 package rufus.core 
 {
 	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
 	import org.flixel.FlxG;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxSprite;
@@ -10,44 +11,30 @@ package rufus.core
 	 * ...
 	 * @author Endel Dreyer, Jefferson Ramos
 	 */
-	public class GameObject extends EventDispatcher
+	public class GameObject extends FlxSprite
 	{
-		public var sprite : FlxSprite;
 		protected var collisionMap : FlxTilemap;
-		protected var reapear : Boolean = false;
-		
-		public var width : Number;
-		public var height : Number;
 		
 		public function GameObject() { }
 		
 		protected function setStaticGraphic(bitmap : * , width : Number, height : Number) : void {
-			this.width = width;
-			this.height = height;
-			
-			sprite = new FlxSprite(width, height);
-			sprite.loadGraphic(bitmap, false, true, width, height);
-			
-			sprite.width = width;
-			sprite.height = height;
+			loadGraphic(bitmap, false, true, width, height);
+			width = width;
+			height = height;
 		}
 		
-		public function addToContainer(container : FlxState, collisionMap : FlxTilemap = null, reapear : Boolean = false) : void 
+		public function addToContainer(container : FlxState, collisionMap : FlxTilemap = null) : void 
 		{
-			this.reapear = reapear;
 			this.collisionMap = collisionMap;
-			container.add(sprite);
+			container.add(this);
 		}
 		
-		public function update() : void
+		override public function update() : void
 		{
-			if (this.reapear) {
-				this.wrap( sprite );
-			}
-			
-			// Apply collision of collisionMap is set
+			super.update();
 			if (this.collisionMap) {
-				FlxG.collide(sprite, this.collisionMap);
+				// Apply collision of collisionMap is set
+				FlxG.collide(this, this.collisionMap);
 			}
 		}
 		
