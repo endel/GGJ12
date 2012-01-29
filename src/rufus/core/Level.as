@@ -13,6 +13,7 @@ package rufus.core
 	import org.flixel.FlxText;
 	import org.flixel.FlxTilemap;
 	import org.flixel.FlxU;
+	import rufus.elements.Background;
 	import rufus.elements.Box;
 	import rufus.elements.BoxMetal;
 	import rufus.elements.BoxWood;
@@ -47,6 +48,7 @@ package rufus.core
 		
 		protected function setPlayer(x:uint, y:uint):void
 		{
+			
 			player = new Player();
 			player.x = x;
 			player.y = y;
@@ -106,7 +108,7 @@ package rufus.core
 				}
 				else
 				{
-					trace("Callback for '" + className + "' not defined.");
+					//trace("Callback for '" + className + "' not defined.");
 				}
 			}
 			FlxG.collide();
@@ -119,6 +121,8 @@ package rufus.core
 			
 			FlxG.debug = true;
 			FlxG.visualDebug = true;
+			
+			addElement(Background, 0, 0);
 			
 			collisionMap = new FlxTilemap();
 			loadTilemap(this.getTilemap());
@@ -210,7 +214,7 @@ package rufus.core
 				onComplete: function() : void {
 					TweenLite.to(obj, 0.5, {
 						alpha: 0,
-						onComplete: function() {
+						onComplete: function():void {
 							obj.kill();
 						}
 					})

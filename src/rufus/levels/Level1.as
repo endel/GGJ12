@@ -25,6 +25,7 @@ package rufus.levels
 			//FlxG.stage.setChildIndex(back, 0);
 			
 			setPlayer(400, 20);
+			
 			addElement(Mushroom, 580, 400);
 			
 			addElement(BoxMetal, 50, 450);
