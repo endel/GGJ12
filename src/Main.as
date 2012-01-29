@@ -21,6 +21,10 @@ package
 		//[Embed(source = "../bin/cenario noite2.png")]	private var noite:Class;
 		//[Embed(source = "../bin/seamlesstexture6_1200.jpg")] private var texture:Class;
 		[Embed(source = "seamlesstexture6_1200.jpg")] private var texture:Class;
+		
+		[Embed(source = "BG-seila.png")] private var background:Class;
+		[Embed(source = "BG-seila2.png")] private var backgroundNight:Class;
+		
 		private var contentDia:Sprite;
 		private var contentNoite:Sprite;
 		private var contentTextura:Sprite;
@@ -34,9 +38,9 @@ package
 			contentTextura = new Sprite();
 			_topMask = new Sprite();
 			
-			//contentDia.addChild(new dia)
-			//contentNoite.addChild(new noite)
-			contentTextura.addChild(new texture);
+			contentDia.addChild(new background)
+			contentNoite.addChild(new backgroundNight)
+			//contentTextura.addChild(new texture);
 			
 			//_topMask = new Sprite();
 			//var fillType:String = "linear"
@@ -71,7 +75,7 @@ package
 			//addChild(_mask)
 			
 			//addChild(_topMask)
-			contentTextura.alpha = .5
+			//contentTextura.alpha = .5
 			//contentTextura.blendMode = BlendMode.OVERLAY;
 			
 			//contentDia.mask = _mask;
@@ -79,6 +83,13 @@ package
 			
 			game = new FlxGame(1024, 640, Level1, 1, 64, 64);
 			addChild(game);
+			
+			//var _mask:Sprite = new Sprite();
+			//_mask.graphics.beginFill(0x000000);
+			//_mask.graphics.drawRect(0, 0, 500, 650);
+			//addChild(_mask);
+			//_mask.alpha = .8
+			//_mask.blendMode = BlendMode.OVERLAY
 			
 			//addChild(contentTextura)
 			//addChild(contentTextura)

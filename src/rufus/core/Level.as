@@ -2,11 +2,16 @@ package rufus.core
 {
 	import com.greensock.easing.Quad;
 	import com.greensock.TweenLite;
+	import flash.display.BitmapData;
 	import flash.events.Event;
+	import flash.geom.ColorTransform;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
+	import org.flixel.FlxPoint;
 	import org.flixel.FlxSave;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
@@ -14,6 +19,7 @@ package rufus.core
 	import org.flixel.FlxTilemap;
 	import org.flixel.FlxU;
 	import rufus.elements.Background;
+	import rufus.elements.BackgroundNight;
 	import rufus.elements.Box;
 	import rufus.elements.BoxMetal;
 	import rufus.elements.BoxWood;
@@ -27,8 +33,10 @@ package rufus.core
 	 */
 	public class Level extends FlxState implements ILevel
 	{
+		private var backgroundNight:GameObject;
+		private var background:GameObject;
 		// Tileset that works with AUTO mode (best for thin walls)
-		[Embed(source="../../../res/terraTiles4.png")]
+		[Embed(source="../../../res/terraTiles5.png")]
 		protected static var tiles:Class;
 		
 		// Some static constants for the size of the tilemap tiles
@@ -56,7 +64,7 @@ package rufus.core
 			gameObjects.push(player);
 		}
 		
-		public function addElement(element:Class, x:uint, y:uint, ignoreCollision:Boolean = false):void
+		public function addElement(element:Class, x:uint, y:uint, ignoreCollision:Boolean = false):GameObject
 		{
 			var el:GameObject = new element();
 			el.y = y;
@@ -79,6 +87,7 @@ package rufus.core
 				}
 				flxGroup.add(el);
 			}
+			return el;
 		}
 		
 		protected function loadTilemap(tilemap:String):void
@@ -88,7 +97,15 @@ package rufus.core
 		
 		override public function update():void
 		{
+			
+			//var newPix:BitmapData = new BitmapData(backgroundNight.width, backgroundNight.height, true, 0xffffff);  // = new BitmapData(38, 343, true, 0x00000000);	
+			//newPix.copyPixels(backgroundNight.pixels, new Rectangle(0, 0, 1050, 650),new Point(0, 0), null, null, true);
+			//
+			//backgroundNight.pixels.dispose();
+			//backgroundNight.pixels = newPix;
+			
 			// Update all GameObjects
+			
 			for (var i:uint = 0; i < gameObjects.length; i++) {
 				if (!gameObjects[i]) {
 					trace("Sprite destroído!!!!!");
@@ -118,11 +135,27 @@ package rufus.core
 		{
 			FlxG.framerate = 50;
 			FlxG.flashFramerate = 50;
+			FlxG.bgColor = 0xffffffff
 			
-			FlxG.debug = true;
-			FlxG.visualDebug = true;
+			//FlxG.debug = true;
+			//FlxG.visualDebug = true;
+			//FlxG.camera.
 			
-			addElement(Background, 0, 0);
+				background = addElement(Background, 0, 0);
+			//background.alpha = .5
+			
+			
+			//backgroundNight = addElement(BackgroundNight, 0, 0);
+			
+		
+			//var newPix:BitmapData = new BitmapData(backgroundNight.width, backgroundNight.height, true, 0xffffff);  // = new BitmapData(38, 343, true, 0x00000000);	
+			//newPix.copyPixels(backgroundNight.pixels, new Rectangle(player.x, 0, player.x - 1200, 1200), new Point(0, 0), null, null, true);
+			//
+			//backgroundNight.pixels.dispose();
+			//backgroundNight.pixels = newPix;
+			
+
+		
 			
 			collisionMap = new FlxTilemap();
 			loadTilemap(this.getTilemap());
