@@ -35,7 +35,7 @@ package rufus.core
 	public class Level extends FlxState implements ILevel
 	{
 		// Tileset that works with AUTO mode (best for thin walls)
-		[Embed(source="../../../res/terraTiles5.png")]
+		[Embed(source="../../../res/terraTiles6.png")]
 		protected static var tiles:Class;
 		
 		// Some static constants for the size of the tilemap tiles
