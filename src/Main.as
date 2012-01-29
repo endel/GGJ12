@@ -5,6 +5,7 @@ package
 	import flash.display.BlendMode;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
+	import jframe.sound.SomManager;
 	import org.flixel.*;
 	import rufus.core.ILevel;
 	import rufus.levels.Level1;
@@ -81,7 +82,8 @@ package
 			
 			//contentDia.mask = _mask;
 			//contentDia.cacheAsBitmap = true;
-			
+			SomManager.changeSoundAmbiente(SomManager.SOM_AMBIENTE);
+			SomManager.playSoundAmbiente();
 			game = new FlxGame(1024, 600, Level4, 1, 64, 64);
 			addChild(game);
 			
