@@ -33,6 +33,8 @@ package rufus.elements
 		static public const GET_ITEM:String = "getItem";
 		static public const USE_ITEM:String = "useItem";
 		
+		private var allowSwapDirection : Boolean = true;
+		
 		static public var SCORE : Number = 0;
 	
 		public function Player()

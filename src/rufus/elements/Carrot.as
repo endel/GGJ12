@@ -27,7 +27,7 @@ package rufus.elements
 		
 		override public function update() : void {
 			if (_state == STATE_PICK) {
-				allowCollisions = FlxObject.ANY;
+				allowCollisions = FlxObject.FLOOR | FlxObject.CEILING;
 				immovable = true;
 			} else {
 				allowCollisions = FlxObject.FLOOR;
