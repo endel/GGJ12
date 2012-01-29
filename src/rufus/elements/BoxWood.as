@@ -7,18 +7,18 @@ package rufus.elements
 	 */
 	public class BoxWood extends Box 
 	{
-		[Embed(source = "../../../res/box-wood.png")] 
+		[Embed(source = "../../../res/caixa-madeira.png")] 
 		private static var bitmap:Class;
 		
-		public function BoxWood() 
+		public function BoxWood()
 		{
-			setStaticGraphic(bitmap, 48, 48);
+			setStaticGraphic(bitmap, 64, 64);
 			sprite.solid = true;
 			
 			sprite.drag.x = 200;
 			
-			sprite.offset.x = 1;
-			sprite.offset.y = 1;
+			sprite.offset.x = -8;
+			sprite.offset.y = -8;
 			
 			//basic sprite physics
 			sprite.acceleration.y = Game.instance.accelerationY;

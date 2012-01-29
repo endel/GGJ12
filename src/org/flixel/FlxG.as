@@ -1,5 +1,6 @@
 package org.flixel
 {
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.display.Sprite;
@@ -714,7 +715,7 @@ package org.flixel
 		 * 
 		 * @return	The <code>BitmapData</code> we just created.
 		 */
-		static public function addBitmap(Graphic:Class, Reverse:Boolean=false, Unique:Boolean=false, Key:String=null):BitmapData
+		static public function addBitmap(Graphic:*, Reverse:Boolean=false, Unique:Boolean=false, Key:String=null):BitmapData
 		{
 			var needReverse:Boolean = false;
 			if(Key == null)
@@ -735,12 +736,13 @@ package org.flixel
 			//If there is no data for this key, generate the requested graphic
 			if(!checkBitmapCache(Key))
 			{
-				_cache[Key] = (new Graphic).bitmapData;
+				_cache[Key] = (Graphic is Class) ? (new Graphic).bitmapData : Bitmap(Graphic).bitmapData;
 				if(Reverse)
 					needReverse = true;
 			}
 			var pixels:BitmapData = _cache[Key];
-			if(!needReverse && Reverse && (pixels.width == (new Graphic).bitmapData.width))
+			
+			if(!needReverse && Reverse && (pixels.width == ((Graphic is Class) ? (new Graphic).bitmapData : Bitmap(Graphic).bitmapData).width))
 				needReverse = true;
 			if(needReverse)
 			{

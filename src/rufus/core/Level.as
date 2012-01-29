@@ -99,7 +99,7 @@ package rufus.core
 			
 			for (var className:String in collisionGroups)
 			{
-				trace(className);
+				// trace(className);
 				if (collisionCallbacks[className])
 				{
 					FlxG.collide(player.sprite, collisionGroups[className], collisionCallbacks[className]);
@@ -183,7 +183,9 @@ package rufus.core
 		
 		private function onCollideCarrot(p:FlxSprite, obj:FlxSprite) : void
 		{
+			p.play(Player.GET_ITEM);
 			obj.solid = false;
+			
 			TweenLite.to(obj, 0.5, { 
 				y: "-20", 
 				alpha: 50, 

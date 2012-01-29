@@ -1,5 +1,6 @@
 package rufus.elements 
 {
+	import animation.PlayerAnimation;
 	import flash.events.Event;
 	import org.flixel.*;
 	import rufus.core.Game;
@@ -12,32 +13,38 @@ package rufus.elements
 	
 	public class Player extends GameObject
 	{
-		[Embed(source = "../../../res/hugo.png")] 
-		private static var PersonagemBmp:Class;
+		private var _animation : PlayerAnimation;
+		private var _allowArrows : Boolean = true;
+		private var _allowJump : Boolean = true;
 		
 		static public const JUMPING:String = "jumping";
 		static public const FALLING:String = "falling";
 		static public const RUNNING:String = "running";
 		static public const IDLE:String = "idle";
 		static public const EVENT_NEXT_LEVEL:String = "eventNextLevel";
+		static public const GET_ITEM:String = "getItem";
+		static public const USE_ITEM:String = "useItem";
 		
 		static public var SCORE : Number = 0;
 	
 		public function Player() 
 		{
-			width = 52;
-			height = 70;
+			_animation = new PlayerAnimation(120, 120);
 			
-			sprite = new FlxSprite(312, 420);
-			sprite.loadGraphic(PersonagemBmp, true, true, width, height);
+			width = _animation.width;
+			height = _animation.height;
+			
+			sprite = new FlxSprite(_animation.content.width, _animation.content.height);
+			sprite.loadGraphic(_animation.content, true, true, width, height);
+			sprite.scale = new FlxPoint( -1, 1);
 			
 			sprite.mass = 1;
 			
 			//bounding box tweaks
-			sprite.width = width;
+			sprite.width = width - 60;
 			sprite.height = height;
-			sprite.offset.x = 1;
-			sprite.offset.y = 1;
+			sprite.offset.x = 20;
+			sprite.offset.y = -30;
 			
 			//basic sprite physics
 			sprite.drag.x = 800;
@@ -46,10 +53,25 @@ package rufus.elements
 			sprite.maxVelocity.y = 500;
 			
 			//animations
-			sprite.addAnimation(IDLE, [17]);
-			sprite.addAnimation(RUNNING, [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], 18);
-			sprite.addAnimation(JUMPING, [20, 21, 22, 23, 24, 25], 18, false);
-			sprite.addAnimation(FALLING, [26, 27, 28, 29], 18, false);
+			sprite.addAnimation(IDLE, [32, 33, 34, 35, 36, 37, 38, 39, 38, 37, 36, 35, 34, 33], 12);
+			
+			sprite.addAnimation(RUNNING, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 18);
+			
+			// 40 - 53: Saindo do chão
+			sprite.addAnimation(JUMPING, [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53], 18, false);
+			
+			// 53 - 60: Caindo no chão
+			sprite.addAnimation(FALLING, [53, 54, 55, 56, 57, 58, 59, 60], 18, false);
+
+			// 60 - 65: Chegando ao solo
+			
+			// 66 - 70: Pegando item
+			sprite.addAnimation(GET_ITEM, [66, 67, 68, 69, 70], 18, false);
+			
+			// 71 - 75: Soltando item
+			sprite.addAnimation(USE_ITEM, [71, 72, 73, 74, 75], 18, false);
+			
+			sprite.addAnimationCallback(animationCallback);
 		}
 		
 		override public function update():void 
@@ -63,30 +85,34 @@ package rufus.elements
 				dispatchEvent( new Event(EVENT_NEXT_LEVEL) );
 			}
 			
-			if(FlxG.keys.LEFT)
-			{
-				sprite.facing = FlxObject.LEFT;
-				sprite.acceleration.x -= sprite.drag.x;
-			}
-			else if(FlxG.keys.RIGHT)
-			{
-				sprite.facing = FlxObject.RIGHT;
-				sprite.acceleration.x += sprite.drag.x;
+			if (_allowArrows) {
+				if(FlxG.keys.LEFT)
+				{
+					sprite.facing = FlxObject.LEFT;
+					sprite.acceleration.x -= sprite.drag.x;
+				}
+				else if(FlxG.keys.RIGHT)
+				{
+					sprite.facing = FlxObject.RIGHT;
+					sprite.acceleration.x += sprite.drag.x;
+				}
 			}
 			
+			
 			// Jump, jump
-			if((FlxG.keys.justPressed("UP") || FlxG.keys.SPACE) && sprite.velocity.y == 0)
+			if(_allowJump && ((FlxG.keys.justPressed("UP") || FlxG.keys.SPACE) && sprite.velocity.y == 0))
 			{
+				
 				sprite.y -= 1;
 				sprite.velocity.y = -200;
 			}
 			
-			//ANIMATION
+			// ANIMATION
 			if (sprite.velocity.y < 0)
 			{
 				sprite.play(JUMPING);
 				
-			} else if(sprite.velocity.y > 0)
+			} else if (sprite.velocity.y > 0)
 			{
 				sprite.play(FALLING);
 			}
@@ -98,8 +124,22 @@ package rufus.elements
 			{
 				sprite.play(RUNNING);
 			}
+			
+			sprite.drawDebug();
+		}
+		
+		function animationCallback(name : String, frame : uint, frameIndex: uint) {
+			if (name == GET_ITEM) {
+				_allowJump = _allowArrows = false;
+			} else if (name == USE_ITEM) {
+				_allowJump = _allowArrows = false;
+			} else {
+				_allowArrows = true;
+				_allowJump = true;
+			}
+			
 		}
 		
 	}
 
-}
+} 

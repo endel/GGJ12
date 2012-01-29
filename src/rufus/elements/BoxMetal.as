@@ -6,19 +6,19 @@ package rufus.elements
 	 */
 	public class BoxMetal extends Box 
 	{
-		[Embed(source = "../../../res/box-metal.png")] 
+		[Embed(source = "../../../res/caixa-ferro.png")] 
 		private static var bitmap:Class;
 		
 		public function BoxMetal() 
 		{
-			setStaticGraphic(bitmap, 48, 48);
+			setStaticGraphic(bitmap, 64, 64);
 			sprite.solid = true;
 			sprite.mass = 100;
 			
 			sprite.drag.x = 500;
 			
-			sprite.offset.x = 1;
-			sprite.offset.y = 1;
+			sprite.offset.x = -8;
+			sprite.offset.y = -8;
 			
 			//basic sprite physics
 			sprite.acceleration.y = 420;

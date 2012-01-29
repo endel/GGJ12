@@ -17,11 +17,13 @@ package animation
 		static public const IDLE:String = "idle";
 		static public const WALK:String = "walk";
 		
-		public function PlayerAnimation() 
+		public function PlayerAnimation(width : uint, height : uint)
 		{
+			super(width, height);
 			_spriteSheet = new SpriteSheetData();
 			_spriteSheet.appendAnimation(new MovieClipToBitmapModel(new AnimaPlayer, 0));
-			_spriteSheet.createSpriteSheet(120, 100, .3, 12);			
+			_spriteSheet.createSpriteSheet(_width, _height, .3, 12);
+			_spriteSheet.content.bitmapData.draw(_spriteSheet.content);
 			_content = _spriteSheet.content;
 		}
 		/**

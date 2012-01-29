@@ -56,6 +56,7 @@ package rufus.core
 			obj.x = (obj.x + obj.width / 2 + FlxG.width) % FlxG.width - obj.width / 2;
 			obj.y = (obj.y + obj.height / 2) % FlxG.height - obj.height / 2;
 		}
+		
 	}
 
 }
