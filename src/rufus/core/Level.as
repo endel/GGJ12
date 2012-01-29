@@ -112,6 +112,7 @@ package rufus.core
 					// enemy.
 					
 					if (player.x - (player.width / 2) < enemy.x) {
+						
 						enemy.state = (player.facing == FlxObject.RIGHT) ? Enemy.STATE_ANGEL : Enemy.STATE_DEMON;
 					} else if ( player.x > enemy.x + (enemy.width/2) ) {
 						enemy.state = (player.facing == FlxObject.LEFT) ? Enemy.STATE_ANGEL : Enemy.STATE_DEMON;

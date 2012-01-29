@@ -16,7 +16,9 @@ package jframe.sound
 		static public var SOM_AMBIENTE:Sound = new SomAmbiente;
 		static public var GET_CARROT:Sound = new PegouCenoura;
 		static public var GET_MUSH:Sound = new PegouCogumelo;
-		static public var WALK:Sound = new BunnyWalk;
+		static public var WALK:Sound = new SoundCoelhoAnda;
+		static public var SWAP:Sound = new Swap;
+		static public var WALKBUNNY:Sound = new BunnyWalk;
 		private static var somAtual:Sound;		
 		public static var VOLUME:Number = 1;		
 		static private var soundChann:SoundChannel;

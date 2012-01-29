@@ -1,6 +1,7 @@
 package rufus.elements 
 {
 	import animation.EnemyAnimation;
+	import jframe.sound.SomManager;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPath;
@@ -133,6 +134,7 @@ package rufus.elements
 		{
 			if (_state != value) {
 				swapping = true;
+				SomManager.playSound(SomManager.SWAP);
 				play( ((value == STATE_ANGEL) ? DEMON_TO_ANGEL : ANGEL_TO_DEMON) );
 			}
 			_state = value;
