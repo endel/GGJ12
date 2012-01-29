@@ -47,15 +47,16 @@ package rufus.elements
 			sprite.offset.y = -30;
 			
 			//basic sprite physics
-			sprite.drag.x = 800;
+			sprite.drag.x = 1800;
 			sprite.acceleration.y = Game.instance.accelerationY;
-			sprite.maxVelocity.x = 100;
+			sprite.maxVelocity.x = 200;
 			sprite.maxVelocity.y = 500;
+			//sprite.velocity.x = 50;
 			
 			//animations
 			sprite.addAnimation(IDLE, [32, 33, 34, 35, 36, 37, 38, 39, 38, 37, 36, 35, 34, 33], 12);
 			
-			sprite.addAnimation(RUNNING, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 18);
+			sprite.addAnimation(RUNNING, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 30);
 			
 			// 40 - 53: Saindo do chão
 			sprite.addAnimation(JUMPING, [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53], 18, false);
