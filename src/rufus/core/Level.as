@@ -9,6 +9,7 @@ package rufus.core
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
+	import jframe.sound.SomManager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
@@ -194,7 +195,7 @@ package rufus.core
 			Game.instance.levelScore += 1;
 			player.allowArrows = false;
 			player.allowJump = false;
-			
+			SomManager.playSound(SomManager.GET_MUSH,1,1)
 			obj.solid = false;
 			TweenLite.to(obj, 0.5, { 
 				y: "-20",
@@ -241,6 +242,7 @@ package rufus.core
 			(obj as Carrot).state = Carrot.STATE_PICKED;
 			player.lock();
 			player.play(Player.GET_ITEM);
+			SomManager.playSound(SomManager.GET_CARROT,1,.2);
 			obj.solid = false;
 			
 			Game.instance.carrots += 1;
