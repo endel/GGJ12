@@ -1,6 +1,7 @@
 package rufus.elements 
 {
 	import org.flixel.FlxObject;
+	import org.flixel.FlxSprite;
 	import rufus.core.Game;
 	import rufus.core.GameObject;
 	
@@ -11,11 +12,13 @@ package rufus.elements
 	public class CarrotUsed extends GameObject 
 	{
 		[Embed(source = "../../../res/cenoura.png")] 
-		private var bitmap:Class;
+		private var cenouraBitmap:Class;
+		private var _cenouraSprite : FlxSprite;
 		
 		[Embed(source = "../../../res/mao.png")] 
-		private var bitmapSwapped:Class;
-				
+		private var handBitmap:Class;
+		private var _handSprite : FlxSprite;
+		
 		private var _state : String;
 		
 		static public const STATE_CARROT:String = "stateCarrot";
@@ -23,12 +26,23 @@ package rufus.elements
 		
 		public function CarrotUsed()
 		{	
+			_cenouraSprite = new FlxSprite();
+			_cenouraSprite.loadGraphic(cenouraBitmap, false, false, 65, 33);
+			
+			_handSprite = new FlxSprite();
+			_handSprite.loadGraphic(handBitmap, false, false, 65, 33);
+			
 			this.state = STATE_CARROT;
 			offset.y = -16;
-			setStaticGraphic(bitmap, 65, 33);
 		}
 		
 		override public function update() : void {
+			if (x > Player.posX) {
+				pixels = (Player.facing == FlxObject.RIGHT) ? _cenouraSprite.pixels : _handSprite.pixels;
+			} else if (x < Player.posX) {
+				pixels = (Player.facing == FlxObject.LEFT) ? _cenouraSprite.pixels : _handSprite.pixels;
+			}
+			
 			allowCollisions = FlxObject.FLOOR;
 			immovable = false;
 			acceleration.y = Game.instance.accelerationY;

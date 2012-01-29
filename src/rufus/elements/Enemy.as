@@ -60,7 +60,7 @@ package rufus.elements
 			addAnimation(DEMON_IDLE, [45, 46, 47, 48, 49, 50, 51, 52, 53, 52, 51, 50, 49, 48, 47, 46], 24);
 			
 			addAnimation(DEMON_GROWLING, [54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74], 24);
-			addAnimation(DEMON_ATTACK, [75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97], 24);
+			addAnimation(DEMON_ATTACK, [75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97], 64);
 			
 			addAnimation(DEMON_CROUCHING, [98, 99, 100, 101, 102], 24);
 			addAnimation(DEMON_EATING, [103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114], 24);
@@ -107,13 +107,18 @@ package rufus.elements
 						trace( FlxU.getDistance(new FlxPoint(targetCarrot.x, targetCarrot.y), new FlxPoint(this.x, this.y)) );
 						if ( FlxU.getDistance(new FlxPoint(targetCarrot.x, targetCarrot.y), new FlxPoint(this.x, this.y)) > 65) {
 							acceleration.x += (targetCarrot.x > x) ? drag.x : -drag.x;
+							facing = (targetCarrot.x > x) ? FlxObject.LEFT : FlxObject.RIGHT;
 						} else {
 							// Stay and keep eating...
 							animation = (state == STATE_ANGEL) ? ANGEL_IDLE : DEMON_EATING;
-							
 							acceleration.x = 0;
 						}
+						
+					} else {
+						animation = tryToAttack(animation);
 					}
+				} else {
+					animation = tryToAttack(animation);
 				}
 				
 				if ( _state == STATE_ANGEL ) {
@@ -121,13 +126,36 @@ package rufus.elements
 					maxVelocity.x = 40;
 					allowCollisions = FlxObject.FLOOR;
 				} else {
-					drag.x = 100;
-					maxVelocity.x = 100;
+					drag.x = 1400;
+					maxVelocity.x = 500;
 					allowCollisions = FlxObject.ANY;
 				}
 				play( animation );
 			}
 			
+		}
+		
+		/**
+		 * 
+		 * @return String 
+		 */
+		private function tryToAttack(defaultAnimation : String) : String
+		{
+			var animation : String = defaultAnimation;
+			if (state == STATE_DEMON) {
+				// Nothing to eat, the demom will kill the player.
+				if (Player.posX > x) {
+					facing = FlxObject.LEFT;
+					acceleration.x += drag.x;
+					animation = DEMON_ATTACK;
+				} else {
+					facing = FlxObject.RIGHT
+					acceleration.x -= drag.x;
+					animation = DEMON_ATTACK;
+				}
+			}
+			
+			return animation;
 		}
 		
 		public function set state(value:String):void 

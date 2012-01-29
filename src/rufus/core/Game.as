@@ -7,6 +7,9 @@ package rufus.core
 	import rufus.levels.Level4;
 	import rufus.levels.Level5;
 	import rufus.levels.Level6;
+	import rufus.levels.Level7;
+	import rufus.levels.Level8;
+	import rufus.levels.Level9;
 	/**
 	 * ...
 	 * @author Endel Dreyer, Jefferson Ramos
@@ -43,11 +46,16 @@ package rufus.core
 			levels.push( Level4 );
 			levels.push( Level5 );
 			levels.push( Level6 );
+			levels.push( Level7 );
+			levels.push( Level8 );
+			levels.push( Level9 );
 		}
 		
 		public function gotoNextLevel() : void {
 			score += levelScore;
 			levelScore = 0;
+			
+			carrots = 0;
 			
 			currentLevel += 1;
 			FlxG.fade(0x0, 1, function() {
@@ -59,6 +67,11 @@ package rufus.core
 					FlxG.switchState( new levels[currentLevel]() );
 				}
 			} );
+		}
+		
+		public function restartLevel():void 
+		{
+			FlxG.switchState( new levels[currentLevel]() );
 		}
 		
 		public function get levelScore():uint 
