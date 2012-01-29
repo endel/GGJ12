@@ -8,16 +8,16 @@ package rufus.levels
 	 * ...
 	 * @author Endel Dreyer, Jefferson Ramos
 	 */
-	public class Level2 extends Level implements ILevel
+	public class Level6 extends Level implements ILevel
 	{
-		[Embed(source="../../../res/tilemaps/lvl2data.txt", mimeType = 'application/octet-stream')]
+		[Embed(source="../../../res/tilemaps/lvl6data.txt", mimeType = 'application/octet-stream')]
 		private static var tilemap : Class;
 		
 		override public function setup() : void 
 		{
-			setPlayer(20, 400);
-			addElement(Mushroom, 980, 340);
-			addElement(Enemy, 498, 510);
+			setPlayer(500, 400);
+			addElement( Mushroom, 400, 400 );
+			addElement(Enemy, 200, 200);
 		}
 		
 		override public function getTilemap() : String

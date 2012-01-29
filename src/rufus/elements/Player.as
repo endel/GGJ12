@@ -15,6 +15,7 @@ package rufus.elements
 	{
 		static public const ID:uint = 100;
 		private var _animation : PlayerAnimation;
+		
 		private var _allowArrows : Boolean = true;
 		private var _allowJump : Boolean = true;
 		
@@ -28,7 +29,7 @@ package rufus.elements
 		
 		static public var SCORE : Number = 0;
 	
-		public function Player() 
+		public function Player()
 		{
 			_animation = new PlayerAnimation(120, 120);
 			
@@ -52,23 +53,23 @@ package rufus.elements
 			//velocity.x = 50;
 			
 			//animations
-			addAnimation(IDLE, [32, 33, 34, 35, 36, 37, 38, 39, 38, 37, 36, 35, 34, 33], 12);
+			addAnimation(IDLE, [31, 32, 33, 34, 35, 36, 37, 38, 39, 38, 37, 36, 35, 34, 33, 32], 12);
 			
-			addAnimation(RUNNING, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 30);
+			addAnimation(RUNNING, [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 42);
 			
 			// 40 - 53: Saindo do chão
-			addAnimation(JUMPING, [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53], 18, false);
+			addAnimation(JUMPING, [39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52], 18, false);
 			
 			// 53 - 60: Caindo no chão
-			addAnimation(FALLING, [53, 54, 55, 56, 57, 58, 59, 60], 18, false);
+			addAnimation(FALLING, [52, 53, 54, 55, 56, 57, 58, 59], 18, false);
 
 			// 60 - 65: Chegando ao solo
 			
 			// 66 - 70: Pegando item
-			addAnimation(GET_ITEM, [66, 67, 68, 69, 70], 18, false);
+			addAnimation(GET_ITEM, [65, 66, 67, 68, 69], 18, false);
 			
 			// 71 - 75: Soltando item
-			addAnimation(USE_ITEM, [71, 72, 73, 74, 75], 18, false);
+			addAnimation(USE_ITEM, [70, 71, 72, 73, 74], 18, false);
 			
 			addAnimationCallback(animationCallback);
 		}
@@ -77,20 +78,16 @@ package rufus.elements
 		{
 			super.update();
 			
-			//MOVEMENT
+			// Movement
 			acceleration.x = 0;
 			
-			if (x > (FlxG.width - width)) {
-				Game.instance.gotoNextLevel();
-			}
-			
-			if (_allowArrows) {
-				if(FlxG.keys.LEFT)
+			if (_allowArrows && Game.instance.endLevel == false) {
+				if(FlxG.keys.LEFT && (x > width))
 				{
 					facing = FlxObject.LEFT;
 					acceleration.x -= drag.x;
 				}
-				else if(FlxG.keys.RIGHT)
+				else if(FlxG.keys.RIGHT && (x < FlxG.width - width))
 				{
 					facing = FlxObject.RIGHT;
 					acceleration.x += drag.x;
@@ -121,8 +118,6 @@ package rufus.elements
 			{
 				play(RUNNING);
 			}
-			
-			drawDebug();
 		}
 		
 		private function animationCallback(name : String, frame : uint, frameIndex: uint):void {
@@ -135,6 +130,26 @@ package rufus.elements
 				_allowJump = true;
 			}
 			
+		}
+		
+		public function get allowArrows():Boolean 
+		{
+			return _allowArrows;
+		}
+		
+		public function set allowArrows(value:Boolean):void 
+		{
+			_allowArrows = value;
+		}
+		
+		public function get allowJump():Boolean 
+		{
+			return _allowJump;
+		}
+		
+		public function set allowJump(value:Boolean):void 
+		{
+			_allowJump = value;
 		}
 		
 	}
