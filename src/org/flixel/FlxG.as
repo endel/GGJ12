@@ -1135,6 +1135,7 @@ package org.flixel
 			content = new Sprite();
 			_mask.graphics.beginFill(0x000000);
 			_mask.graphics.drawRect(0, 0, 1200, 700);
+			_mask.x = -1200;
 			//_mask.cacheAsBitmap = true;
 			
 			containerDia = new Sprite()

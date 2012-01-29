@@ -50,12 +50,12 @@ package rufus.core
 		
 		protected var gameObjects:Vector.<GameObject> = new Vector.<GameObject>();
 		protected var groups:Object = new Object();
+		protected var startedGroupCollisions : Object = new Object();
 		
 		protected var collisionCallbacks:Object = new Object();
 		
 		protected function setPlayer(x:uint, y:uint):void
 		{
-			
 			player = new Player();
 			player.x = x;
 			player.y = y;
@@ -125,14 +125,24 @@ package rufus.core
 				// trace(className);
 				if (collisionCallbacks[className])
 				{
-					FlxG.collide(player, groups[className], collisionCallbacks[className]);
+					if (className == "Enemy") {
+						getGroup(className).members.every(function(it) {
+							if ( (it as Enemy).state == Enemy.STATE_DEMON ) {
+								FlxG.collide(player, it, collisionCallbacks[className]);
+							}
+						});
+					} else {
+						FlxG.collide(player, groups[className], collisionCallbacks[className]);
+					}
 				}
 				else
 				{
 					//trace("Callback for '" + className + "' not defined.");
 				}
 			}
-			FlxG.collide();
+			
+			// if (groups[""])
+			//FlxG.collide();
 		}
 		
 		override public function create():void

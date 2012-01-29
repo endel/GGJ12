@@ -124,7 +124,7 @@ package rufus.elements
 				if ( _state == STATE_ANGEL ) {
 					drag.x = 100;
 					maxVelocity.x = 40;
-					allowCollisions = FlxObject.FLOOR;
+					allowCollisions = FlxObject.ANY;
 				} else {
 					drag.x = 1400;
 					maxVelocity.x = 500;
