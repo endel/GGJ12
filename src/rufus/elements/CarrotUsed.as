@@ -8,32 +8,30 @@ package rufus.elements
 	 * ...
 	 * @author Endel Dreyer, Jefferson Ramos
 	 */
-	public class Carrot extends GameObject 
+	public class CarrotUsed extends GameObject 
 	{
 		[Embed(source = "../../../res/cenoura.png")] 
 		private var bitmap:Class;
+		
+		[Embed(source = "../../../res/mao.png")] 
+		private var bitmapSwapped:Class;
 				
 		private var _state : String;
 		
-		static public const STATE_PICK:String = "statePick";
-		static public const STATE_PICKED:String = "statePicked";
+		static public const STATE_CARROT:String = "stateCarrot";
+		static public const STATE_HAND:String = "stateHand";
 		
-		public function Carrot()
+		public function CarrotUsed()
 		{	
-			this.state = STATE_PICK;
-			offset.y = -8;
+			this.state = STATE_CARROT;
+			offset.y = -16;
 			setStaticGraphic(bitmap, 65, 33);
 		}
 		
 		override public function update() : void {
-			if (_state == STATE_PICK) {
-				allowCollisions = FlxObject.ANY;
-				immovable = true;
-			} else {
-				allowCollisions = FlxObject.FLOOR;
-				immovable = false;
-				acceleration.y = Game.instance.accelerationY;
-			}
+			allowCollisions = FlxObject.FLOOR;
+			immovable = false;
+			acceleration.y = Game.instance.accelerationY;
 		}
 		
 		public function get state():String 

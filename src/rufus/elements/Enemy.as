@@ -1,10 +1,12 @@
 package rufus.elements 
 {
 	import animation.EnemyAnimation;
+	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPath;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
+	import org.flixel.FlxU;
 	import rufus.core.Game;
 	import rufus.core.GameObject;
 	
@@ -27,7 +29,7 @@ package rufus.elements
 		static public const ANGEL_TO_DEMON:String = "angelToDemon";
 		static public const ANGEL_WALKING:String = "angelWalking";
 		static public const ANGEL_IDLE:String = "angelIdle";
-		static public const DEMON_WALK:String = "demonWalk";
+		static public const DEMON_WALKING:String = "demonWalk";
 		static public const DEMON_GROWLING:String = "demonGrowling";
 		
 		// -> Usando FlxPath: https://github.com/AdamAtomic/FlxCollisions/blob/master/src/PlayState.as
@@ -45,17 +47,15 @@ package rufus.elements
 			mass = 100;
 			
 			width = _animation.width - 32;
-			height = _animation.height - 32;
+			height = _animation.height - 36;
 			
 			offset.x = 14;
 			offset.y = 14;
 			
-			drag.x = 200;
 			acceleration.y = Game.instance.accelerationY;
-			maxVelocity.x = 200;
 			maxVelocity.y = 200;
 			
-			addAnimation(DEMON_WALK, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44], 24);
+			addAnimation(DEMON_WALKING, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44], 24);
 			addAnimation(DEMON_IDLE, [45, 46, 47, 48, 49, 50, 51, 52, 53, 52, 51, 50, 49, 48, 47, 46], 24);
 			
 			addAnimation(DEMON_GROWLING, [54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74], 24);
@@ -85,12 +85,46 @@ package rufus.elements
 		}
 		
 		override public function update() : void {
+			super.update();
 			if (!swapping) {
-				if ( _state == STATE_ANGEL ) {
-					play(ANGEL_IDLE);
-				} else {
-					play(DEMON_IDLE);
+				var animation : String = (state == STATE_ANGEL) ? ANGEL_IDLE : DEMON_IDLE;;
+				
+				// Find a carrot to follow as a bunny
+				var carrots : FlxGroup = _level.getGroup("CarrotUsed");
+				if (carrots) {
+					var targetCarrot : CarrotUsed = null;
+					
+					for each (var n:uint in carrots.members) {
+						if ((Math.abs(y - carrots.members[n].y)) < 100) {
+							targetCarrot = carrots.members[n] as CarrotUsed;
+						}
+					}
+					
+					if (targetCarrot) {
+						animation = (state == STATE_ANGEL) ? ANGEL_WALKING : DEMON_WALKING;
+						// Approaching to eat...
+						trace( FlxU.getDistance(new FlxPoint(targetCarrot.x, targetCarrot.y), new FlxPoint(this.x, this.y)) );
+						if ( FlxU.getDistance(new FlxPoint(targetCarrot.x, targetCarrot.y), new FlxPoint(this.x, this.y)) > 65) {
+							acceleration.x += (targetCarrot.x > x) ? drag.x : -drag.x;
+						} else {
+							// Stay and keep eating...
+							animation = (state == STATE_ANGEL) ? ANGEL_IDLE : DEMON_EATING;
+							
+							acceleration.x = 0;
+						}
+					}
 				}
+				
+				if ( _state == STATE_ANGEL ) {
+					drag.x = 100;
+					maxVelocity.x = 40;
+					allowCollisions = FlxObject.FLOOR;
+				} else {
+					drag.x = 100;
+					maxVelocity.x = 100;
+					allowCollisions = FlxObject.ANY;
+				}
+				play( animation );
 			}
 			
 		}

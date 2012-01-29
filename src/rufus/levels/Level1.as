@@ -4,7 +4,6 @@ package rufus.levels
 	import org.flixel.FlxG;
 	import rufus.core.ILevel;
 	import rufus.core.Level;
-	import rufus.elements.Background;
 	import rufus.elements.BoxMetal;
 	import rufus.elements.BoxWood;
 	import rufus.elements.Carrot;

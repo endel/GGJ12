@@ -19,8 +19,6 @@ package rufus.core
 	import org.flixel.FlxText;
 	import org.flixel.FlxTilemap;
 	import org.flixel.FlxU;
-	import rufus.elements.Background;
-	import rufus.elements.BackgroundNight;
 	import rufus.elements.Box;
 	import rufus.elements.BoxMetal;
 	import rufus.elements.BoxWood;
@@ -35,8 +33,6 @@ package rufus.core
 	 */
 	public class Level extends FlxState implements ILevel
 	{
-		private var backgroundNight:GameObject;
-		private var background:GameObject;
 		// Tileset that works with AUTO mode (best for thin walls)
 		[Embed(source="../../../res/terraTiles5.png")]
 		protected static var tiles:Class;
@@ -52,7 +48,7 @@ package rufus.core
 		protected var hud:HUD;
 		
 		protected var gameObjects:Vector.<GameObject> = new Vector.<GameObject>();
-		protected var collisionGroups:Object = new Object();
+		protected var groups:Object = new Object();
 		
 		protected var collisionCallbacks:Object = new Object();
 		
@@ -66,7 +62,7 @@ package rufus.core
 			gameObjects.push(player);
 		}
 		
-		public function addElement(element:Class, x:uint, y:uint, ignoreCollision:Boolean = false):GameObject
+		public function addElement(element:Class, x:uint, y:uint, ignoreCollision:Boolean = false) : GameObject
 		{
 			var el:GameObject = new element();
 			el.y = y;
@@ -76,18 +72,19 @@ package rufus.core
 			
 			if (!ignoreCollision)
 			{
-				var className:String = (FlxU.getClassName(el).split(".")).slice(-1)[0];
+				var className:String = (FlxU.getClassName(el).split(".")).slice( -1)[0];
 				
 				var flxGroup:FlxGroup;
-				if (!collisionGroups[className])
+				if (!groups[className])
 				{
-					flxGroup = collisionGroups[className] = new FlxGroup();
+					flxGroup = new FlxGroup();
 				}
 				else
 				{
-					flxGroup = collisionGroups[className];
+					flxGroup = groups[className];
 				}
 				flxGroup.add(el);
+				groups[className] = flxGroup;
 			}
 			return el;
 		}
@@ -99,21 +96,6 @@ package rufus.core
 		
 		override public function update():void
 		{
-			
-			//var newPix:BitmapData = new BitmapData(backgroundNight.width, backgroundNight.height, true, 0xffffff);  // = new BitmapData(38, 343, true, 0x00000000);	
-			//newPix.copyPixels(backgroundNight.pixels, new Rectangle(0, 0, 1050, 650),new Point(0, 0), null, null, true);
-			//
-			//backgroundNight.pixels.dispose();
-			//backgroundNight.pixels = newPix;
-			
-			
-			if (Game.instance.carrots > 0 && FlxG.keys.ENTER) {
-				Game.instance.carrots -= 1;
-				addElement(Carrot, );
-				player.play(USE_ITEM);
-			}
-			
-			
 			// Update all GameObjects
 			for (var i:uint = 0; i < gameObjects.length; i++) {
 				gameObjects[i].update();
@@ -123,25 +105,25 @@ package rufus.core
 			super.update();
 			
 			// Swap enemy state
-			if (collisionGroups["Enemy"]) {
-				(collisionGroups["Enemy"] as FlxGroup).members.every(function(flx) {
+			if (groups["Enemy"]) {
+				(groups["Enemy"] as FlxGroup).members.every(function(flx) {
 					var enemy : Enemy = flx as Enemy;
 					// enemy.
 					
-					if (player.x - player.width < enemy.x) {
+					if (player.x - (player.width / 2) < enemy.x) {
 						enemy.state = (player.facing == FlxObject.RIGHT) ? Enemy.STATE_ANGEL : Enemy.STATE_DEMON;
-					} else if ( player.x > enemy.x + enemy.width ) {
+					} else if ( player.x > enemy.x + (enemy.width/2) ) {
 						enemy.state = (player.facing == FlxObject.LEFT) ? Enemy.STATE_ANGEL : Enemy.STATE_DEMON;
 					}
 				});
 			}
 			
-			for (var className:String in collisionGroups)
+			for (var className:String in groups)
 			{
 				// trace(className);
 				if (collisionCallbacks[className])
 				{
-					FlxG.collide(player, collisionGroups[className], collisionCallbacks[className]);
+					FlxG.collide(player, groups[className], collisionCallbacks[className]);
 				}
 				else
 				{
@@ -157,25 +139,8 @@ package rufus.core
 			FlxG.flashFramerate = 50;
 			FlxG.bgColor = 0xffffffff
 			
-			//FlxG.debug = true;
-			//FlxG.visualDebug = true;
-			//FlxG.camera.
-			
-				background = addElement(Background, 0, 0);
-			//background.alpha = .5
-			
-			
-			//backgroundNight = addElement(BackgroundNight, 0, 0);
-			
-		
-			//var newPix:BitmapData = new BitmapData(backgroundNight.width, backgroundNight.height, true, 0xffffff);  // = new BitmapData(38, 343, true, 0x00000000);	
-			//newPix.copyPixels(backgroundNight.pixels, new Rectangle(player.x, 0, player.x - 1200, 1200), new Point(0, 0), null, null, true);
-			//
-			//backgroundNight.pixels.dispose();
-			//backgroundNight.pixels = newPix;
-			
-
-		
+			FlxG.debug = true;
+			FlxG.visualDebug = true;
 			
 			collisionMap = new FlxTilemap();
 			loadTilemap(this.getTilemap());
@@ -205,6 +170,11 @@ package rufus.core
 		public override function draw():void
 		{
 			super.draw();
+		}
+		
+		public function getGroup(className : String) : FlxGroup
+		{
+			return groups[className] as FlxGroup;
 		}
 		
 		/*
@@ -256,11 +226,20 @@ package rufus.core
 					// Kill the player!
 				}
 			}
-
 		}
 		
 		private function onCollideCarrot(p:FlxSprite, obj:FlxSprite) : void
 		{
+			// Ignore if isn't in pick mode
+			if ((obj as Carrot).state != Carrot.STATE_PICK) {
+				return;
+			}
+			
+			// obj.allowCollisions = FlxObject.NONE;
+			obj.alive = false;
+			
+			(obj as Carrot).state = Carrot.STATE_PICKED;
+			player.lock();
 			player.play(Player.GET_ITEM);
 			obj.solid = false;
 			

@@ -50,13 +50,15 @@ package rufus.core
 			levelScore = 0;
 			
 			currentLevel += 1;
-			Game.instance.endLevel = false;
-			try {
-				FlxG.switchState( new levels[currentLevel]() );
-			} catch (e:Error) {
-				currentLevel = 0;
-				FlxG.switchState( new levels[currentLevel]() );
-			}
+			FlxG.fade(0x0, 1, function() {
+				Game.instance.endLevel = false;
+				try {
+					FlxG.switchState( new levels[currentLevel]() );
+				} catch (e:Error) {
+					currentLevel = 0;
+					FlxG.switchState( new levels[currentLevel]() );
+				}
+			} );
 		}
 		
 		public function get levelScore():uint 

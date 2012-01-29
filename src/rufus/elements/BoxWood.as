@@ -1,5 +1,6 @@
 package rufus.elements 
 {
+	import org.flixel.FlxObject;
 	import rufus.core.Game;
 	/**
 	 * ...
@@ -15,7 +16,8 @@ package rufus.elements
 			setStaticGraphic(bitmap, 64, 64);
 			solid = true;
 			
-			drag.x = 200;
+			mass = 1;
+			drag.x = 400;
 			
 			width = 54;
 			height = 48;

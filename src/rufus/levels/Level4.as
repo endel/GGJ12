@@ -2,6 +2,8 @@ package rufus.levels
 {
 	import rufus.core.ILevel;
 	import rufus.core.Level;
+	import rufus.elements.BoxMetal;
+	import rufus.elements.BoxWood;
 	import rufus.elements.Carrot;
 	import rufus.elements.Enemy;
 	import rufus.elements.Mushroom;
@@ -17,8 +19,10 @@ package rufus.levels
 		override public function setup() : void 
 		{
 			setPlayer(20, 500);
-			addElement(Carrot, 320, 500);
-			addElement(Enemy, 600, 500);
+			addElement(BoxWood, 200, 400);
+			addElement(BoxMetal, 100, 400);
+			addElement(Carrot, 320, 490);
+			addElement(Enemy, 600, 400);
 			addElement(Mushroom, 950, 500);
 		}
 		

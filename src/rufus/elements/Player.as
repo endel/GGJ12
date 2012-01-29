@@ -5,6 +5,7 @@ package rufus.elements
 	import org.flixel.*;
 	import rufus.core.Game;
 	import rufus.core.GameObject;
+	import rufus.core.Level;
 	
 	/**
 	 * ...
@@ -19,6 +20,9 @@ package rufus.elements
 		private var _allowArrows : Boolean = true;
 		private var _allowJump : Boolean = true;
 		private var _lockAnimation : Boolean = false;
+		
+		public static var facing : uint = 0;
+		public static var posX : Number = 0;
 		
 		static public const JUMPING:String = "jumping";
 		static public const FALLING:String = "falling";
@@ -95,12 +99,23 @@ package rufus.elements
 				}
 			}
 			
+			if (Game.instance.carrots > 0 && (FlxG.keys.ENTER || FlxG.keys.DOWN)) {
+				Game.instance.carrots -= 1;
+				var carrot : CarrotUsed = this._level.addElement(CarrotUsed, x + 30, y + 7, false) as CarrotUsed;
+				play(Player.USE_ITEM);
+				_lockAnimation = true;
+			}
+			
 			// Jump, jump
-			if(_allowJump && ((FlxG.keys.justPressed("UP") || FlxG.keys.SPACE) && velocity.y == 0))
+			if(_allowJump && ((FlxG.keys.justPressed("UP") || FlxG.keys.SPACE) && isTouching(FlxObject.FLOOR)))
 			{
 				y -= 1;
 				velocity.y = -300;
 			}
+			
+			// Global for background update 
+			Player.facing  = facing;
+			Player.posX = x;
 			
 			if (_lockAnimation) {
 				return;
@@ -110,7 +125,7 @@ package rufus.elements
 			if (velocity.y < 0)
 			{
 				play(JUMPING);
-			} else if (velocity.y > 0)
+			} else if (velocity.y >= 50)
 			{
 				play(FALLING);
 			}
@@ -124,14 +139,22 @@ package rufus.elements
 			}
 		}
 		
+		public function lock() : void {
+			_lockAnimation = true;
+			_allowJump = _allowArrows = false;
+		}
+		
+		public function unlock() : void {
+			_lockAnimation = false;
+			_allowJump = _allowArrows = true;
+		}
+		
 		private function animationCallback(name : String, frame : uint, frameIndex: uint):void {
 			if (name == GET_ITEM || name == USE_ITEM) {
-				_lockAnimation = true;
-				_allowJump = _allowArrows = false;
+				this.lock();
 				if (frame == 4) {
 					_lockAnimation = false;
 				}
-			// } else if (  ) {
 			} else {
 				_allowArrows = true;
 				_allowJump = true;

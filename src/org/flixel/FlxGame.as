@@ -162,6 +162,9 @@ package org.flixel
 		 * This function, if set, is triggered when the callback stops playing.
 		 */
 		internal var _replayCallback:Function;
+		
+		[Embed(source = "../../BG-seila.png")] public static var bgDia:Class;
+		[Embed(source = "../../BG-seila2.png")] public static var bgNoite:Class;
 
 		/**
 		 * Instantiate a new game object.
@@ -176,6 +179,7 @@ package org.flixel
 		 */
 		public function FlxGame(GameSizeX:uint,GameSizeY:uint,InitialState:Class,Zoom:Number=1,GameFramerate:uint=60,FlashFramerate:uint=30,UseSystemCursor:Boolean=false)
 		{
+			
 			//super high priority init stuff (focus, mouse, etc)
 			_lostFocus = false;
 			_focus = new Sprite();
@@ -210,6 +214,12 @@ package org.flixel
 			_requestedReset = true;
 			_created = false;
 			addEventListener(Event.ENTER_FRAME, create);
+			
+		}
+		
+		public function createBackgrounds():void 
+		{
+			addChild(new bgDia);
 		}
 		
 		/**
@@ -726,6 +736,8 @@ package org.flixel
 			_soundTray.addChild(text);
 			text.text = "VOLUME";
 			text.y = 16;
+			
+			
 			
 			var bx:uint = 10;
 			var by:uint = 14;

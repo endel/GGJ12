@@ -13,9 +13,9 @@ package rufus.elements
 		{
 			setStaticGraphic(bitmap, 64, 64);
 			solid = true;
-			mass = 100;
 			
-			drag.x = 500;
+			mass = 100;
+			drag.x = 1000;
 			
 			width = 54;
 			height = 48;
