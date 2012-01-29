@@ -22,7 +22,7 @@ package animation
 			super(width, height);
 			_spriteSheet = new SpriteSheetData();
 			_spriteSheet.appendAnimation(new MovieClipToBitmapModel(new MushroomAnima, 0));
-			_spriteSheet.createSpriteSheet(_width, _height, .1, 12);
+			_spriteSheet.createSpriteSheet(_width, _height, .7, 12);
 			_spriteSheet.content.bitmapData.draw(_spriteSheet.content);
 			_content = _spriteSheet.content;
 		}
