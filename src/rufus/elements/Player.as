@@ -48,9 +48,9 @@ package rufus.elements
 			mass = 1;
 			
 			//bounding box tweaks
-			width = _animation.width - 60;
+			width = _animation.width - 56;
 			height = _animation.height - 60;
-			offset.x = 26;
+			offset.x = 30;
 			offset.y = 26;
 			
 			//basic sprite physics

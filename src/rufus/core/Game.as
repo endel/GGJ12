@@ -4,7 +4,7 @@ package rufus.core
 	import rufus.levels.Level1;
 	import rufus.levels.Level2;
 	import rufus.levels.Level3;
-	import rufus.levels.Level4;
+	// import rufus.levels.Level4;
 	import rufus.levels.Level5;
 	import rufus.levels.Level6;
 	import rufus.levels.Level7;
@@ -43,7 +43,7 @@ package rufus.core
 			levels.push( Level1 );
 			levels.push( Level2 );
 			levels.push( Level3 );
-			levels.push( Level4 );
+			// levels.push( Level4 );
 			levels.push( Level5 );
 			levels.push( Level6 );
 			levels.push( Level7 );

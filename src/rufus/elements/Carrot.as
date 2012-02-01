@@ -21,13 +21,13 @@ package rufus.elements
 		public function Carrot()
 		{	
 			this.state = STATE_PICK;
-			offset.y = -8;
+			offset.y = -6;
 			setStaticGraphic(bitmap, 65, 33);
 		}
 		
 		override public function update() : void {
 			if (_state == STATE_PICK) {
-				allowCollisions = FlxObject.FLOOR | FlxObject.CEILING;
+				allowCollisions = FlxObject.ANY;
 				immovable = true;
 			} else {
 				allowCollisions = FlxObject.FLOOR;

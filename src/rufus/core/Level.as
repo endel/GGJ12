@@ -131,6 +131,10 @@ package rufus.core
 								FlxG.collide(player, it, collisionCallbacks[className]);
 							}
 						});
+					} else if ( className == "CarrotUsed" ) {
+						FlxG.collide(FlxG.state, groups[className]);
+						FlxG.collide(player, groups[className], collisionCallbacks[className]);
+						
 					} else {
 						FlxG.collide(player, groups[className], collisionCallbacks[className]);
 					}

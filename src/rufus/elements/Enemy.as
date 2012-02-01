@@ -2,6 +2,7 @@ package rufus.elements
 {
 	import animation.EnemyAnimation;
 	import jframe.sound.SomManager;
+	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPath;
@@ -49,9 +50,6 @@ package rufus.elements
 			
 			width = _animation.width - 32;
 			height = _animation.height - 36;
-			
-			offset.x = 14;
-			offset.y = 14;
 			
 			acceleration.y = Game.instance.accelerationY;
 			maxVelocity.y = 200;
@@ -124,11 +122,16 @@ package rufus.elements
 				if ( _state == STATE_ANGEL ) {
 					drag.x = 100;
 					maxVelocity.x = 40;
+					acceleration.x = 0;
 					allowCollisions = FlxObject.ANY;
 				} else {
 					drag.x = 1400;
-					maxVelocity.x = 500;
+					maxVelocity.x = 450;
 					allowCollisions = FlxObject.ANY;
+				}
+				if (x > FlxG.width - width || (x < width)) {
+					maxVelocity.x = 10;
+					acceleration.x = -1;
 				}
 				play( animation );
 			}
@@ -163,6 +166,8 @@ package rufus.elements
 			if (_state != value) {
 				swapping = true;
 				SomManager.playSound(SomManager.SWAP);
+				offset.x = (value == STATE_ANGEL) ? 14 : 14;
+				offset.y = (value == STATE_ANGEL) ? 14 : 14;
 				play( ((value == STATE_ANGEL) ? DEMON_TO_ANGEL : ANGEL_TO_DEMON) );
 			}
 			_state = value;
