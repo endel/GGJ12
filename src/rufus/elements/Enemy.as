@@ -1,6 +1,5 @@
 package rufus.elements 
 {
-	import animation.EnemyAnimation;
 	import jframe.sound.SomManager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
@@ -18,6 +17,9 @@ package rufus.elements
 	 */
 	public class Enemy extends GameObject
 	{
+		[Embed(source = "../../../res/enemy.png")] 
+		private var bitmap : Class;
+		
 		private var _state : String;
 		
 		static public const STATE_ANGEL : String = "stateAngel";
@@ -35,21 +37,19 @@ package rufus.elements
 		static public const DEMON_GROWLING:String = "demonGrowling";
 		
 		// -> Usando FlxPath: https://github.com/AdamAtomic/FlxCollisions/blob/master/src/PlayState.as
-		private var _animation : EnemyAnimation;
+
 		private var _followPath : FlxPath;
 		private var swapping:Boolean;
 		
 		public function Enemy() 
 		{
 			this._state = STATE_ANGEL;
-			
-			_animation = new EnemyAnimation(120, 100);
-			loadGraphicAsBitmap(_animation.content, true, true, _animation.width, _animation.height);
+			loadGraphicAsBitmap(bitmap, true, true, 120, 100);
 			
 			mass = 100;
 			
-			width = _animation.width - 32;
-			height = _animation.height - 36;
+			width = 120 - 32;
+			height = 100 - 36;
 			
 			acceleration.y = Game.instance.accelerationY;
 			maxVelocity.y = 200;

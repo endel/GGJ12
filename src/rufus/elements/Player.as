@@ -1,6 +1,5 @@
 package rufus.elements 
 {
-	import animation.PlayerAnimation;
 	import flash.events.Event;
 	import jframe.sound.SomManager;
 	import org.flixel.*;
@@ -16,7 +15,9 @@ package rufus.elements
 	public class Player extends GameObject
 	{
 		static public const ID:uint = 100;
-		private var _animation : PlayerAnimation;
+		
+		[Embed(source = "../../../res/rufus.png")]
+		private var bitmap : Class;
 		
 		private var _allowArrows : Boolean = true;
 		private var _allowJump : Boolean = true;
@@ -39,17 +40,16 @@ package rufus.elements
 	
 		public function Player()
 		{
-			_animation = new PlayerAnimation(120, 120);
 			
-			loadGraphicAsBitmap(_animation.content, true, true, _animation.width, _animation.height);
+			loadGraphicAsBitmap(bitmap, true, true, 120, 120);
 			scale = new FlxPoint( -1, 1);
 			ID = ID;
 			
 			mass = 1;
 			
 			//bounding box tweaks
-			width = _animation.width - 56;
-			height = _animation.height - 60;
+			width = 120 - 56;
+			height = 120 - 60;
 			offset.x = 30;
 			offset.y = 26;
 			
@@ -158,7 +158,7 @@ package rufus.elements
 		private function animationCallback(name : String, frame : uint, frameIndex: uint):void {
 			if (name == RUNNING) {
 				if (frame == 2) {
-				SomManager.playSound(SomManager.WALK)
+					SomManager.playSound(SomManager.WALK)
 				}
 			}
 			if (name == GET_ITEM || name == USE_ITEM) {

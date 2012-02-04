@@ -1,36 +1,32 @@
 package rufus.core 
 {
+	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
+	import org.flixel.FlxGroup;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
 	import org.flixel.FlxText;
+	import org.flixel.plugin.photonstorm.FlxExtendedSprite;
 	import rufus.elements.Player;
 	
 	/**
 	 * ...
 	 * @author Endel Dreyer, Jefferson Ramos
 	 */
-	public class HUD 
+	public class HUD extends FlxGroup
 	{
-		[Embed(source = "../../../res/mushroom.png")]
-		private static var ScoreBmp:Class;
 		[Embed(source = "../../../res/restart.png")]
 		private static var restart:Class;
-		[Embed(source = "../../../res/exit.png")]
-		private static var exit:Class;
 		
-		private var restartSprite : FlxSprite;
-		private var exitSprite : FlxSprite;
+		private var restartSprite : FlxExtendedSprite;
 		private var scoreTxt : FlxText;
 		
-		public function HUD(container : FlxState) 
+		public function HUD() 
 		{
-			restartSprite = new FlxSprite(800, 10, restart)
-			container.add(restartSprite)
-			
-			exitSprite = new FlxSprite(880, 10, exit)
-			container.add(exitSprite)
-			
+			restartSprite = new  FlxExtendedSprite(0, 0, restart);
+			restartSprite.clickable = true;
+			restartSprite.mousePressedCallback = Game.instance.restartLevel;
+			add(restartSprite)
 			
 			//restartSprite.cli
 			//scoreSprite = new FlxSprite(5, 5, ScoreBmp);
@@ -41,10 +37,13 @@ package rufus.core
 			//container.add(scoreTxt);
 		}
 		
-		public function update():void 
+		override public function postUpdate():void 
 		{
+			restartSprite.x = FlxG.camera.scroll.x; //  - restartSprite.width - 5;
+			restartSprite.y = FlxG.camera.scroll.y; // - restartSprite.height - 5;
 			//scoreTxt.text = Game.instance.levelScore.toString();
 		}
+		
 	}
 
 }

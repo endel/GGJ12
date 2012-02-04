@@ -25,7 +25,8 @@ package rufus.elements
 		static public const STATE_HAND:String = "stateHand";
 		
 		public function CarrotUsed()
-		{	
+		{
+			solid = 
 			_cenouraSprite = new FlxSprite();
 			_cenouraSprite.loadGraphic(cenouraBitmap, false, false, 65, 33);
 			
@@ -44,7 +45,6 @@ package rufus.elements
 			}
 			
 			allowCollisions = FlxObject.FLOOR;
-			immovable = false;
 			acceleration.y = Game.instance.accelerationY;
 		}
 		

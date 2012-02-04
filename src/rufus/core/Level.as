@@ -20,6 +20,8 @@ package rufus.core
 	import org.flixel.FlxText;
 	import org.flixel.FlxTilemap;
 	import org.flixel.FlxU;
+	import rufus.effects.ParallaxBackground;
+	import rufus.effects.ParallaxForeground;
 	import rufus.elements.Box;
 	import rufus.elements.BoxMetal;
 	import rufus.elements.BoxWood;
@@ -43,36 +45,96 @@ package rufus.core
 		protected const TILE_HEIGHT:uint = 64;
 		
 		// The FlxTilemap we're using	
-		protected var collisionMap:FlxTilemap;
+		protected var tilemap:FlxTilemap;
 		
 		protected var player:Player;
 		protected var hud:HUD;
 		
 		protected var gameObjects:Vector.<GameObject> = new Vector.<GameObject>();
 		protected var groups:Object = new Object();
+		protected var tilemapCollideable : FlxGroup;
 		protected var startedGroupCollisions : Object = new Object();
 		
 		protected var collisionCallbacks:Object = new Object();
+		protected var background : ParallaxBackground;
+		protected var foreground : ParallaxForeground;
 		
+		override public function create():void
+		{
+			FlxG.framerate = 50;
+			FlxG.flashFramerate = 50;
+			FlxG.bgColor = 0xffbfe4e5;
+			
+			background = new ParallaxBackground();
+			add(background);
+			
+			//FlxG.debug = true;
+			//FlxG.visualDebug = true;
+			
+			tilemap = new FlxTilemap();
+			loadTilemap(this.getTilemap());
+			add(tilemap);
+			
+			tilemapCollideable = new FlxGroup();
+			
+			this.setup();
+			
+			foreground = new ParallaxForeground();
+			add(foreground);
+			
+			hud = new HUD();
+			add(hud);
+			
+			this.collisionCallbacks = {
+				Mushroom: onCollideMushroom,
+				BoxWood: onCollideBoxWood,
+				BoxMetal: onCollideBoxMetal,
+				Carrot: onCollideCarrot,
+				Enemy: onCollideEnemy
+			};
+		}
+		
+		/**
+		 * Create player and set his position on the level.
+		 * 
+		 * @param	x
+		 * @param	y
+		 */
 		protected function setPlayer(x:uint, y:uint):void
 		{
 			player = new Player();
 			player.x = x;
 			player.y = y;
-			player.addToContainer(this, collisionMap);
+			player.addToContainer(this);
 			gameObjects.push(player);
+			FlxG.camera.target = player;
+			
+			// Add to tilemap collideable group
+			tilemapCollideable.add(player);
 		}
 		
+		/**
+		 * Add a dynamic game element to the level.
+		 * 
+		 * @param	element
+		 * @param	x
+		 * @param	y
+		 * @param	ignoreCollision
+		 * @return	GameObject	The created element on the level
+		 */
 		public function addElement(element:Class, x:uint, y:uint, ignoreCollision:Boolean = false) : GameObject
 		{
 			var el:GameObject = new element();
 			el.y = y;
 			el.x = x;
-			el.addToContainer(this, collisionMap);
+			el.addToContainer(this);
 			gameObjects.push(el);
 			
 			if (!ignoreCollision)
 			{
+				// Add to tilemap collideable group
+				tilemapCollideable.add(el);
+				
 				var className:String = (FlxU.getClassName(el).split(".")).slice( -1)[0];
 				
 				var flxGroup:FlxGroup;
@@ -90,11 +152,26 @@ package rufus.core
 			return el;
 		}
 		
-		protected function loadTilemap(tilemap:String):void
+		/**
+		 * Load a tilemap string
+		 * 
+		 * @param	tilemap
+		 */
+		protected function loadTilemap(rawTilemap:String):void
 		{
-			collisionMap.loadMap(tilemap, tiles, TILE_WIDTH, TILE_HEIGHT, FlxTilemap.OFF);
+			tilemap.loadMap(rawTilemap, tiles, TILE_WIDTH, TILE_HEIGHT, FlxTilemap.OFF);
 		}
 		
+		override public function preUpdate():void 
+		{
+			
+		}
+		
+		/**
+		 * 
+		 * Main game loop loop loop game loop loop loop game loop ...
+		 * 
+		 */
 		override public function update():void
 		{
 			// Update all GameObjects
@@ -102,7 +179,6 @@ package rufus.core
 				gameObjects[i].update();
 			}
 			
-			hud.update();
 			super.update();
 			
 			// Swap enemy state
@@ -112,7 +188,6 @@ package rufus.core
 					// enemy.
 					
 					if (player.x - (player.width / 2) < enemy.x) {
-						
 						enemy.state = (player.facing == FlxObject.RIGHT) ? Enemy.STATE_ANGEL : Enemy.STATE_DEMON;
 					} else if ( player.x > enemy.x + (enemy.width/2) ) {
 						enemy.state = (player.facing == FlxObject.LEFT) ? Enemy.STATE_ANGEL : Enemy.STATE_DEMON;
@@ -146,32 +221,8 @@ package rufus.core
 			}
 			
 			// if (groups[""])
-			//FlxG.collide();
-		}
-		
-		override public function create():void
-		{
-			FlxG.framerate = 50;
-			FlxG.flashFramerate = 50;
-			FlxG.bgColor = 0xffffffff
-			
-			//FlxG.debug = true;
-			//FlxG.visualDebug = true;
-			
-			collisionMap = new FlxTilemap();
-			loadTilemap(this.getTilemap());
-			add(collisionMap);
-			
-			this.collisionCallbacks = {
-				Mushroom: onCollideMushroom,
-				BoxWood: onCollideBoxWood,
-				BoxMetal: onCollideBoxMetal,
-				Carrot: onCollideCarrot,
-				Enemy: onCollideEnemy
-			};
-			
-			hud = new HUD(this);
-			this.setup();
+			// FlxG.collide();
+			FlxG.collide(tilemapCollideable, tilemap)
 		}
 		
 		public function getTilemap():String
@@ -196,7 +247,6 @@ package rufus.core
 		/*
 		 * Callbacks
 		 */
-		
 		private function onCollideEnemy(p:FlxSprite, obj:FlxSprite) : void
 		{
 			if ( (obj as Enemy).state == Enemy.STATE_DEMON ) {

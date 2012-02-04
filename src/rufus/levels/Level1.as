@@ -16,7 +16,7 @@ package rufus.levels
 	public class Level1 extends Level implements ILevel
 	{
 		[Embed(source="../../../res/tilemaps/lvl1data.txt", mimeType = 'application/octet-stream')]
-		private static var tilemap : Class;
+		private static var levelTiles : Class;
 		
 		override public function setup() : void 
 		{
@@ -24,11 +24,12 @@ package rufus.levels
 			addElement(Mushroom, 950, 380);
 			addElement(Carrot, 300, 380);
 			addElement(Carrot, 400, 380);
+			addElement(Enemy, 600, 380);
 		}
 		
 		override public function getTilemap() : String
 		{
-			return new tilemap();
+			return new levelTiles();
 		}
 		
 	}

@@ -1,7 +1,5 @@
 package
 {
-	import animation.EnemyAnimation;
-	import animation.PlayerAnimation;
 	import flash.display.BlendMode;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
@@ -15,19 +13,15 @@ package
 	import rufus.levels.Level9;
 	import rufus.levels.Menu;
 	
-	[SWF(width="1024", height="600", backgroundColor="#000000")]
+	[SWF(width="960", height="640", backgroundColor="#000000")]
 	[Frame(factoryClass = "Preloader")]
-	
+
 
 	public class Main extends Sprite
 	{
 		private var game : FlxGame;
 		
-		//[Embed(source = "../bin/cenario dia1.png")] private var dia:Class;
-		//[Embed(source = "../bin/cenario noite2.png")]	private var noite:Class;
-		//[Embed(source = "../bin/seamlesstexture6_1200.jpg")] private var texture:Class;
 		[Embed(source = "seamlesstexture6_1200.jpg")] private var texture:Class;
-		
 		[Embed(source = "BG-seila.png")] private var background:Class;
 		[Embed(source = "BG-seila2.png")] private var backgroundNight:Class;
 		
@@ -88,7 +82,8 @@ package
 			//contentDia.cacheAsBitmap = true;
 			SomManager.changeSoundAmbiente(SomManager.SOM_AMBIENTE);
 			SomManager.playSoundAmbiente();
-			game = new FlxGame(1024, 600, Level9, 1, 64, 64);
+			
+			game = new FlxGame(960, 640, Menu, 1, 64, 64);
 			addChild(game);
 			
 			//var _mask:Sprite = new Sprite();

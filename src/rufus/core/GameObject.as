@@ -13,7 +13,6 @@ package rufus.core
 	 */
 	public class GameObject extends FlxSprite
 	{
-		protected var collisionMap : FlxTilemap;
 		protected var _level : Level;
 		
 		public function GameObject() { }
@@ -24,9 +23,8 @@ package rufus.core
 			height = height;
 		}
 		
-		public function addToContainer(container : Level, collisionMap : FlxTilemap = null) : void 
+		public function addToContainer(container : Level) : void 
 		{
-			this.collisionMap = collisionMap;
 			this._level = container;
 			this._level.add(this);
 		}
@@ -34,11 +32,6 @@ package rufus.core
 		override public function update() : void
 		{
 			super.update();
-			
-			if (this.collisionMap) {
-				// Apply collision of collisionMap is set
-				FlxG.collide(this, this.collisionMap);
-			}
 		}
 		
 		protected function wrap(obj:FlxObject):void

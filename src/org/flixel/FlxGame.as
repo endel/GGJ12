@@ -33,7 +33,7 @@ package org.flixel
 		[Embed(source="data/nokiafc22.ttf",fontFamily="system",embedAsCFF="false")] protected var junk:String;
 		[Embed(source="data/beep.mp3")] protected var SndBeep:Class;
 		[Embed(source="data/logo.png")] protected var ImgLogo:Class;
-
+		
 		/**
 		 * Sets 0, -, and + to control the global volume sound volume.
 		 * @default true
@@ -162,9 +162,6 @@ package org.flixel
 		 * This function, if set, is triggered when the callback stops playing.
 		 */
 		internal var _replayCallback:Function;
-		
-		[Embed(source = "../../BG-seila.png")] public static var bgDia:Class;
-		[Embed(source = "../../BG-seila2.png")] public static var bgNoite:Class;
 
 		/**
 		 * Instantiate a new game object.
@@ -215,11 +212,6 @@ package org.flixel
 			_created = false;
 			addEventListener(Event.ENTER_FRAME, create);
 			
-		}
-		
-		public function createBackgrounds():void 
-		{
-			addChild(new bgDia);
 		}
 		
 		/**
