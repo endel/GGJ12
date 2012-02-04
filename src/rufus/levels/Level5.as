@@ -10,14 +10,15 @@ package rufus.levels
 	 */
 	public class Level5 extends Level implements ILevel
 	{
-		[Embed(source="../../../res/tilemaps/lvl5data.txt", mimeType = 'application/octet-stream')]
+		[Embed(source="../../../res/tilemaps/meumap5.txt", mimeType = 'application/octet-stream')]
 		private static var tilemap : Class;
 		
 		override public function setup() : void 
 		{
-			setPlayer(500, 400);
-			addElement( Mushroom, 400, 400 );
-			addElement(Enemy, 200, 200);
+			setPlayer(200, 400);
+			addElement( Mushroom, 0, 400 );
+			addElement(Enemy, 600, 0);
+			addElement(Enemy, 400, 300);
 		}
 		
 		override public function getTilemap() : String

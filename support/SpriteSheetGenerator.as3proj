@@ -4,13 +4,13 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="bin\globalgamejam2012.swf" />
+    <movie path="bin\SpriteSheetGenerator.swf" />
     <movie fps="30" />
-    <movie width="1024" />
+    <movie width="800" />
     <movie height="600" />
-    <movie version="10" />
-    <movie minorVersion="1" />
-    <movie platform="Flash Player" />
+    <movie version="3" />
+    <movie minorVersion="2" />
+    <movie platform="AIR" />
     <movie background="#FFFFFF" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
@@ -40,7 +40,7 @@
     <option linkReport="" />
     <option loadExterns="" />
     <option staticLinkRSL="True" />
-    <option additional="" />
+    <option additional="+configname=air" />
     <option compilerConstants="" />
     <option minorVersion="" />
   </build>
@@ -50,7 +50,6 @@
   </includeLibraries>
   <!-- SWC Libraries -->
   <libraryPaths>
-    <element path="lib\greensock.swc" />
     <element path="lib\AnimationPack.swc" />
   </libraryPaths>
   <!-- External Libraries -->
@@ -84,7 +83,8 @@
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />
-    <option testMovie="Default" />
+    <option testMovie="Custom" />
+    <option testMovieCommand="Run.bat" />
   </options>
   <!-- Plugin storage -->
   <storage />
