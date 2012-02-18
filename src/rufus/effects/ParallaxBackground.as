@@ -2,6 +2,7 @@ package rufus.effects
 {
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
+	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	/**
 	 * ...
@@ -30,29 +31,21 @@ package rufus.effects
 			layer1.loadGraphic(bitmap1);
 			layers.push( layer1 );
 			add( layer1 );
+			layer1.scrollFactor = new FlxPoint(0.3, 0.3);
 			
 			var layer2 : FlxSprite = new FlxSprite();
 			layer2.loadGraphic(bitmap2);
 			layers.push( layer2 );
 			add( layer2 );
+			layer2.scrollFactor = new FlxPoint(0.7, 0.7);
 			
 			var layer3 : FlxSprite = new FlxSprite();
 			layer3.loadGraphic(bitmap3);
 			layers.push( layer3 );
 			add( layer3 );
+			layer3.scrollFactor = new FlxPoint(1, 1);
 		}
 		
-		override public function postUpdate():void 
-		{
-			var distance 	: Number = layerDistance,
-				i 			: uint,
-				numLayers 	: uint = layers.length;
-			for (i = 0; i < numLayers; i++) {
-				layers[i].x = ((FlxG.camera.target.x - (layers[i].width / 2)) * distance);
-				layers[i].y = ((FlxG.camera.target.y - (layers[i].height / 2)) * distance);
-				distance *= layerDistanceMultiplier;
-			}
-		}
 		
 	}
 

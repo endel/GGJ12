@@ -5,8 +5,6 @@ package rufus.core
 	import rufus.levels.Level2;
 	import rufus.levels.Level3;
 	import rufus.levels.Level4;
-	import rufus.levels.Menu;
-	// import rufus.levels.Level4;
 	import rufus.levels.Level5;
 	import rufus.levels.Level6;
 	import rufus.levels.Level7;
@@ -27,6 +25,7 @@ package rufus.core
 		private var score : uint = 0;
 		private var _carrots : uint = 0;
 		private var _levelScore : uint = 0;
+		private var _currentLevel : Level;
 		public var accelerationY : uint = 500;
 		
 		public static function get instance() : Game {
@@ -42,11 +41,11 @@ package rufus.core
 			}
 			
 			levels = new Vector.<Class>();
-			levels.push( Menu );
 			levels.push( Level1 );
-			levels.push( Level2 );
-			levels.push( Level3 );
+			levels.push( Level1 );
 			levels.push( Level4 );
+			levels.push( Level3 );
+			levels.push( Level2 );
 			levels.push( Level5 );
 			levels.push( Level6 );
 			levels.push( Level7 );
@@ -105,6 +104,15 @@ package rufus.core
 		public function set carrots(value:uint):void 
 		{
 			_carrots = value;
+		}
+		
+		public function set level(value:Level):void 
+		{
+			_currentLevel = value;
+		}
+		
+		public function get level() : Level {
+			return this._currentLevel;
 		}
 		
 	}

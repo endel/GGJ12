@@ -1,5 +1,6 @@
 package rufus.elements 
 {
+	import flash.geom.Point;
 	import jframe.sound.SomManager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
@@ -53,6 +54,7 @@ package rufus.elements
 			
 			acceleration.y = Game.instance.accelerationY;
 			maxVelocity.y = 200;
+			allowCollisions = FlxObject.ANY;
 			
 			addAnimation(DEMON_WALKING, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44], 24);
 			addAnimation(DEMON_IDLE, [45, 46, 47, 48, 49, 50, 51, 52, 53, 52, 51, 50, 49, 48, 47, 46], 24);
@@ -84,58 +86,90 @@ package rufus.elements
 		}
 		
 		override public function update() : void {
-			super.update();
+			this.updateState();
+			
+			if (this.state == STATE_DEMON) {
+				trace("Enemy =>", (allowCollisions == FlxObject.ANY));
+				FlxG.collide(Player.instance, this, onCollidePlayer);
+			}
+			
 			if (!swapping) {
-				var animation : String = (state == STATE_ANGEL) ? ANGEL_IDLE : DEMON_IDLE;;
+				var animation : String = (state == STATE_ANGEL) ? ANGEL_IDLE : DEMON_IDLE,
+					foodFound : CarrotUsed = null,
+					carrots : FlxGroup = _level.getGroup("CarrotUsed");
 				
-				// Find a carrot to follow as a bunny
-				var carrots : FlxGroup = _level.getGroup("CarrotUsed");
+				// Try to find a carrot to follow as a bunny
 				if (carrots) {
-					var targetCarrot : CarrotUsed = null;
-					
 					for each (var n:uint in carrots.members) {
-						if ((Math.abs(y - carrots.members[n].y)) < 100) {
-							targetCarrot = carrots.members[n] as CarrotUsed;
+						var _carrot : CarrotUsed = carrots.members[n] as CarrotUsed;
+						trace( carrots.members[n] );
+						trace( _carrot );
+						if ( Point.distance( new Point(x,y), new Point(_carrot.x, _carrot.y) ) < 100 ) {
+							foodFound = carrots.members[n] as CarrotUsed;
 						}
 					}
 					
-					if (targetCarrot) {
+					if (foodFound) {
 						animation = (state == STATE_ANGEL) ? ANGEL_WALKING : DEMON_WALKING;
 						// Approaching to eat...
-						trace( FlxU.getDistance(new FlxPoint(targetCarrot.x, targetCarrot.y), new FlxPoint(this.x, this.y)) );
-						if ( FlxU.getDistance(new FlxPoint(targetCarrot.x, targetCarrot.y), new FlxPoint(this.x, this.y)) > 65) {
-							acceleration.x += (targetCarrot.x > x) ? drag.x : -drag.x;
-							facing = (targetCarrot.x > x) ? FlxObject.LEFT : FlxObject.RIGHT;
+						if ( FlxU.getDistance(new FlxPoint(foodFound.x, foodFound.y), new FlxPoint(this.x, this.y)) > 65) {
+							acceleration.x += (foodFound.x > x) ? drag.x : -drag.x;
+							facing = (foodFound.x > x) ? FlxObject.LEFT : FlxObject.RIGHT;
 						} else {
 							// Stay and keep eating...
 							animation = (state == STATE_ANGEL) ? ANGEL_IDLE : DEMON_EATING;
 							acceleration.x = 0;
 						}
 						
-					} else {
-						animation = tryToAttack(animation);
 					}
-				} else {
+				}
+				if (!foodFound) {
 					animation = tryToAttack(animation);
 				}
 				
-				if ( _state == STATE_ANGEL ) {
-					drag.x = 100;
-					maxVelocity.x = 40;
-					acceleration.x = 0;
-					allowCollisions = FlxObject.ANY;
-				} else {
-					drag.x = 1400;
-					maxVelocity.x = 450;
-					allowCollisions = FlxObject.ANY;
-				}
-				if (x > FlxG.width - width || (x < width)) {
-					maxVelocity.x = 10;
-					acceleration.x = -1;
-				}
 				play( animation );
 			}
 			
+		}
+		
+		/**
+		 * When collides with Player
+		 * 
+		 * @param	p
+		 * @param	obj
+		 */
+		private function onCollidePlayer(p:FlxSprite, obj:FlxSprite) : void
+		{
+			trace("Kill the player!!");
+			// obj.allowCollisions = FlxObject.FLOOR;
+			
+			// Kill the player
+			// p.allowCollisions = FlxObject.FLOOR;
+			(p as Player).lock();
+			
+			FlxG.fade(0x0, 0.5, function() : void {
+				Game.instance.restartLevel();
+			});
+		}
+		
+		private function updateState():void 
+		{
+			if (Player.POS_X - (Player.WIDTH / 2) < this.x) {
+				this.state = (Player.FACING == FlxObject.RIGHT) ? Enemy.STATE_ANGEL : Enemy.STATE_DEMON;
+			} else if ( Player.POS_X > this.x + (this.width / 2) ) {
+				this.state = (Player.FACING == FlxObject.LEFT) ? Enemy.STATE_ANGEL : Enemy.STATE_DEMON;
+			}
+			
+			if ( _state == STATE_ANGEL ) {
+				drag.x = 100;
+				maxVelocity.x = 40;
+			} else {
+				drag.x = 800;
+				maxVelocity.x = 200;
+			}
+			if (x > FlxG.width - width || (x < 0)) {
+				maxVelocity.x = 10;
+			}
 		}
 		
 		/**
@@ -147,7 +181,7 @@ package rufus.elements
 			var animation : String = defaultAnimation;
 			if (state == STATE_DEMON) {
 				// Nothing to eat, the demom will kill the player.
-				if (Player.posX > x) {
+				if (Player.POS_X > x) {
 					facing = FlxObject.LEFT;
 					acceleration.x += drag.x;
 					animation = DEMON_ATTACK;
@@ -165,9 +199,12 @@ package rufus.elements
 		{
 			if (_state != value) {
 				swapping = true;
+				acceleration.x = 0;
+				
 				SomManager.playSound(SomManager.SWAP);
-				offset.x = (value == STATE_ANGEL) ? 14 : 14;
-				offset.y = (value == STATE_ANGEL) ? 14 : 14;
+				offset.x = (value == STATE_ANGEL) ? 22 : 14;
+				offset.y = (value == STATE_ANGEL) ? 22 : 14;
+				allowCollisions = (value == STATE_ANGEL) ? FlxObject.FLOOR : FlxObject.ANY;
 				play( ((value == STATE_ANGEL) ? DEMON_TO_ANGEL : ANGEL_TO_DEMON) );
 			}
 			_state = value;

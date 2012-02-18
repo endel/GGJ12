@@ -18,26 +18,26 @@ package rufus.effects
 		
 		public function ParallaxForeground() 
 		{
-			layers = new Vector.<FlxSprite>();
-			
-			var layer1 : FlxSprite = new FlxSprite();
-			layer1.loadGraphic(bitmap1);
-			layers.push( layer1 );
-			add( layer1 );
+			//layers = new Vector.<FlxSprite>();
+			//
+			//var layer1 : FlxSprite = new FlxSprite();
+			//layer1.loadGraphic(bitmap1);
+			//layers.push( layer1 );
+			//add( layer1 );
 		}
 		
 		override public function postUpdate():void 
 		{
-			var distanceX 	: Number = layerDistanceX,
-				distanceY 	: Number = layerDistanceY,
-				i 			: uint,
-				numLayers 	: uint = layers.length;
-			for (i = 0; i < numLayers; i++) {
-				layers[i].x = ((FlxG.camera.target.x - (layers[i].width / 2)) * distanceX);
-				layers[i].y = ((FlxG.camera.target.y - (layers[i].height / 2)) * distanceY);
-				distanceX *= layerDistanceX;
-				distanceY *= layerDistanceY;
-			}
+			//var distanceX 	: Number = layerDistanceX,
+				//distanceY 	: Number = layerDistanceY,
+				//i 			: uint,
+				//numLayers 	: uint = layers.length;
+			//for (i = 0; i < numLayers; i++) {
+				//layers[i].x = ((FlxG.camera.target.x - (layers[i].width / 2)) * distanceX);
+				//layers[i].y = ((FlxG.camera.target.y - (layers[i].height / 2)) * distanceY);
+				//distanceX *= layerDistanceX;
+				//distanceY *= layerDistanceY;
+			//}
 		}
 		
 	}

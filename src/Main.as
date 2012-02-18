@@ -6,96 +6,22 @@ package
 	import jframe.sound.SomManager;
 	import org.flixel.*;
 	import rufus.core.ILevel;
-	import rufus.levels.Level1;
-	import rufus.levels.Level3;
-	import rufus.levels.Level4;
-	import rufus.levels.Level5;
-	import rufus.levels.Level9;
-	import rufus.levels.Menu;
+	import rufus.scenes.MainMenu;
 	
 	[SWF(width="960", height="640", backgroundColor="#000000")]
 	[Frame(factoryClass = "Preloader")]
-
-
+	
 	public class Main extends Sprite
 	{
 		private var game : FlxGame;
 		
-		[Embed(source = "seamlesstexture6_1200.jpg")] private var texture:Class;
-		[Embed(source = "BG-seila.png")] private var background:Class;
-		[Embed(source = "BG-seila2.png")] private var backgroundNight:Class;
-		
-		private var contentDia:Sprite;
-		private var contentNoite:Sprite;
-		private var contentTextura:Sprite;
-		private var _mask:Sprite;
-		private var _topMask:Sprite;
-		
 		public function Main()
 		{
-			contentDia = new Sprite();
-			contentNoite = new Sprite();
-			contentTextura = new Sprite();
-			_topMask = new Sprite();
-			
-			contentDia.addChild(new background)
-			contentNoite.addChild(new backgroundNight)
-			//contentTextura.addChild(new texture);
-			
-			//_topMask = new Sprite();
-			//var fillType:String = "linear"
-			//var colors:Array = [0x000000, 0x000000];
-			//var alphas:Array = [.7, 0];
-			//var ratios:Array = [0x77,0xff];			
-			//var matrix:Matrix = new Matrix();
-			//matrix.createGradientBox(1200, 600, 0, 0, 0);
-			//var spreadMethod:String = "pad";
-			//_topMask.graphics.beginFill(0x990088);
-			//_topMask.graphics.beginGradientFill(fillType, colors, alphas,ratios,matrix,spreadMethod );
-			//_topMask.graphics.drawRect(0, 0, 1200, 650);
-			//_topMask.cacheAsBitmap = true;
-			//_topMask.blendMode = BlendMode.OVERLAY;
-			//
-			//_mask = new Sprite();			
-			//
-			//fillType = "linear"
-			//colors = [0x000000, 0x000000];
-			//alphas = [0, 1];
-			//ratios = [0x11,0xff];			
-			//matrix = new Matrix();
-			//matrix.createGradientBox(100, 20, 0, 0, 0);
-			//spreadMethod = "pad";
-			//_mask.graphics.beginGradientFill(fillType, colors, alphas,ratios,matrix,spreadMethod );
-			//_mask.graphics.beginFill(0 );
-			//_mask.graphics.drawRect(0, 0, 1200, 650);
-			//_mask.cacheAsBitmap = true;
-			
-			//addChild(contentNoite)
-			//addChild(contentDia)
-			//addChild(_mask)
-			
-			//addChild(_topMask)
-			//contentTextura.alpha = .5
-			//contentTextura.blendMode = BlendMode.OVERLAY;
-			
-			//contentDia.mask = _mask;
-			//contentDia.cacheAsBitmap = true;
 			SomManager.changeSoundAmbiente(SomManager.SOM_AMBIENTE);
 			SomManager.playSoundAmbiente();
 			
-			game = new FlxGame(960, 640, Menu, 1, 64, 64);
+			game = new FlxGame(960, 640, MainMenu, 1, 64, 64);
 			addChild(game);
-			
-			//var _mask:Sprite = new Sprite();
-			//_mask.graphics.beginFill(0x000000);
-			//_mask.graphics.drawRect(0, 0, 500, 650);
-			//addChild(_mask);
-			//_mask.alpha = .8
-			//_mask.blendMode = BlendMode.OVERLAY
-			
-			//addChild(contentTextura)
-			//addChild(contentTextura)
-			//addChild(_topMask)
 		}
 	}
 }

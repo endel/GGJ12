@@ -1,5 +1,6 @@
 package rufus.elements 
 {
+	import org.flixel.FlxG;
 	import org.flixel.FlxObject;
 	import rufus.core.Game;
 	/**
@@ -17,7 +18,7 @@ package rufus.elements
 			solid = true;
 			
 			mass = 1;
-			drag.x = 400;
+			drag.x = 500;
 			
 			width = 54;
 			height = 48;
@@ -28,6 +29,10 @@ package rufus.elements
 			acceleration.y = Game.instance.accelerationY;
 		}
 		
+		override public function update():void 
+		{
+			FlxG.collide( Player.instance, this );
+		}
 	}
 
 }

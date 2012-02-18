@@ -22,7 +22,7 @@ package rufus.levels
 			addElement(BoxWood, 80, 20);
 			//addElement(BoxMetal, 100, 400);
 			//addElement(Carrot, 320, 490);
-			addElement(Enemy, 500, 400);
+			addElement(Enemy, 500, 300);
 			addElement(Mushroom, 950, 50);
 		}
 		

@@ -26,7 +26,6 @@ package rufus.elements
 		
 		public function CarrotUsed()
 		{
-			solid = 
 			_cenouraSprite = new FlxSprite();
 			_cenouraSprite.loadGraphic(cenouraBitmap, false, false, 65, 33);
 			
@@ -35,13 +34,14 @@ package rufus.elements
 			
 			this.state = STATE_CARROT;
 			offset.y = -16;
+			
 		}
 		
 		override public function update() : void {
-			if (x > Player.posX) {
-				pixels = (Player.facing == FlxObject.RIGHT) ? _cenouraSprite.pixels : _handSprite.pixels;
-			} else if (x < Player.posX) {
-				pixels = (Player.facing == FlxObject.LEFT) ? _cenouraSprite.pixels : _handSprite.pixels;
+			if (x > Player.POS_X) {
+				pixels = (Player.FACING == FlxObject.RIGHT) ? _cenouraSprite.pixels : _handSprite.pixels;
+			} else if (x < Player.POS_X) {
+				pixels = (Player.FACING == FlxObject.LEFT) ? _cenouraSprite.pixels : _handSprite.pixels;
 			}
 			
 			allowCollisions = FlxObject.FLOOR;

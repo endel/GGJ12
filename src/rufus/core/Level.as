@@ -14,6 +14,7 @@ package rufus.core
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
+	import org.flixel.FlxRect;
 	import org.flixel.FlxSave;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
@@ -47,7 +48,7 @@ package rufus.core
 		// The FlxTilemap we're using	
 		protected var tilemap:FlxTilemap;
 		
-		protected var player:Player;
+		protected var _player:Player;
 		protected var hud:HUD;
 		
 		protected var gameObjects:Vector.<GameObject> = new Vector.<GameObject>();
@@ -55,7 +56,6 @@ package rufus.core
 		protected var tilemapCollideable : FlxGroup;
 		protected var startedGroupCollisions : Object = new Object();
 		
-		protected var collisionCallbacks:Object = new Object();
 		protected var background : ParallaxBackground;
 		protected var foreground : ParallaxForeground;
 		
@@ -68,15 +68,14 @@ package rufus.core
 			background = new ParallaxBackground();
 			add(background);
 			
-			//FlxG.debug = true;
-			//FlxG.visualDebug = true;
+			FlxG.debug = true;
+			FlxG.visualDebug = true;
 			
 			tilemap = new FlxTilemap();
 			loadTilemap(this.getTilemap());
 			add(tilemap);
 			
 			tilemapCollideable = new FlxGroup();
-			
 			this.setup();
 			
 			foreground = new ParallaxForeground();
@@ -84,14 +83,6 @@ package rufus.core
 			
 			hud = new HUD();
 			add(hud);
-			
-			this.collisionCallbacks = {
-				Mushroom: onCollideMushroom,
-				BoxWood: onCollideBoxWood,
-				BoxMetal: onCollideBoxMetal,
-				Carrot: onCollideCarrot,
-				Enemy: onCollideEnemy
-			};
 		}
 		
 		/**
@@ -102,12 +93,14 @@ package rufus.core
 		 */
 		protected function setPlayer(x:uint, y:uint):void
 		{
-			player = new Player();
+			Game.instance.level = this;
+			_player = new Player();
 			player.x = x;
 			player.y = y;
 			player.addToContainer(this);
 			gameObjects.push(player);
 			FlxG.camera.target = player;
+			FlxG.camera.bounds = new FlxRect(0, 0, 1200, 640);
 			
 			// Add to tilemap collideable group
 			tilemapCollideable.add(player);
@@ -135,7 +128,7 @@ package rufus.core
 				// Add to tilemap collideable group
 				tilemapCollideable.add(el);
 				
-				var className:String = (FlxU.getClassName(el).split(".")).slice( -1)[0];
+				var className:String = (FlxU.getClassName(el).split(".")).slice(-1)[0];
 				
 				var flxGroup:FlxGroup;
 				if (!groups[className])
@@ -168,61 +161,17 @@ package rufus.core
 		}
 		
 		/**
-		 * 
 		 * Main game loop loop loop game loop loop loop game loop ...
-		 * 
 		 */
 		override public function update():void
 		{
-			// Update all GameObjects
-			for (var i:uint = 0; i < gameObjects.length; i++) {
-				gameObjects[i].update();
-			}
-			
 			super.update();
 			
-			// Swap enemy state
-			if (groups["Enemy"]) {
-				(groups["Enemy"] as FlxGroup).members.every(function(flx) {
-					var enemy : Enemy = flx as Enemy;
-					// enemy.
-					
-					if (player.x - (player.width / 2) < enemy.x) {
-						enemy.state = (player.facing == FlxObject.RIGHT) ? Enemy.STATE_ANGEL : Enemy.STATE_DEMON;
-					} else if ( player.x > enemy.x + (enemy.width/2) ) {
-						enemy.state = (player.facing == FlxObject.LEFT) ? Enemy.STATE_ANGEL : Enemy.STATE_DEMON;
-					}
-				});
+			if (groups["CarrotUsed"]) {
+				FlxG.collide(FlxG.state, groups["CarrotUsed"]);
 			}
 			
-			for (var className:String in groups)
-			{
-				// trace(className);
-				if (collisionCallbacks[className])
-				{
-					if (className == "Enemy") {
-						getGroup(className).members.every(function(it) {
-							if ( (it as Enemy).state == Enemy.STATE_DEMON ) {
-								FlxG.collide(player, it, collisionCallbacks[className]);
-							}
-						});
-					} else if ( className == "CarrotUsed" ) {
-						FlxG.collide(FlxG.state, groups[className]);
-						FlxG.collide(player, groups[className], collisionCallbacks[className]);
-						
-					} else {
-						FlxG.collide(player, groups[className], collisionCallbacks[className]);
-					}
-				}
-				else
-				{
-					//trace("Callback for '" + className + "' not defined.");
-				}
-			}
-			
-			// if (groups[""])
-			// FlxG.collide();
-			FlxG.collide(tilemapCollideable, tilemap)
+			FlxG.collide(tilemapCollideable, tilemap);
 		}
 		
 		public function getTilemap():String
@@ -230,9 +179,7 @@ package rufus.core
 			return "";
 		}
 		
-		public function setup():void
-		{
-		}
+		public function setup():void {}
 		
 		public override function draw():void
 		{
@@ -244,92 +191,9 @@ package rufus.core
 			return groups[className] as FlxGroup;
 		}
 		
-		/*
-		 * Callbacks
-		 */
-		private function onCollideEnemy(p:FlxSprite, obj:FlxSprite) : void
+		public function get player():Player 
 		{
-			if ( (obj as Enemy).state == Enemy.STATE_DEMON ) {
-				obj.allowCollisions = FlxObject.NONE;
-				// Kill the player
-				p.allowCollisions = FlxObject.FLOOR;
-				FlxG.fade(0x0, 0.5, function():void {
-					Game.instance.restartLevel();
-				});
-			}
-		}
-		
-		private function onCollideMushroom(p:FlxSprite, obj:FlxSprite) : void
-		{
-			Game.instance.endLevel = true;
-			Game.instance.levelScore += 1;
-			player.allowArrows = false;
-			player.allowJump = false;
-			SomManager.playSound(SomManager.GET_MUSH,1,1)
-			obj.solid = false;
-			TweenLite.to(obj, 0.5, { 
-				y: "-20",
-				alpha: 50, 
-				ease: Quad.easeOut, 
-				onComplete: function() : void{
-					TweenLite.to(obj, 0.5, {
-						alpha: 0,
-						onComplete: function() : void {
-							Game.instance.gotoNextLevel();
-							obj.kill();
-						}
-					})
-				}
-			});
-		}
-		
-		private function onCollideBoxWood(p:FlxSprite, obj:FlxSprite) : void
-		{
-			
-		}
-		
-		private function onCollideBoxMetal(p:FlxSprite, obj:FlxSprite) : void
-		{
-			if (p.ID == Player.ID) {
-				obj.immovable = true;
-				obj.solid = true;
-				if (obj.velocity.y > 5) {
-					// Kill the player!
-				}
-			}
-		}
-		
-		private function onCollideCarrot(p:FlxSprite, obj:FlxSprite) : void
-		{
-			// Ignore if isn't in pick mode
-			if ((obj as Carrot).state != Carrot.STATE_PICK) {
-				return;
-			}
-			
-			// obj.allowCollisions = FlxObject.NONE;
-			obj.alive = false;
-			
-			(obj as Carrot).state = Carrot.STATE_PICKED;
-			player.lock();
-			player.play(Player.GET_ITEM);
-			SomManager.playSound(SomManager.GET_CARROT,1,.2);
-			obj.solid = false;
-			
-			Game.instance.carrots += 1;
-			
-			TweenLite.to(obj, 0.5, { 
-				y: "-20", 
-				alpha: 50, 
-				ease: Quad.easeOut, 
-				onComplete: function() : void {
-					TweenLite.to(obj, 0.5, {
-						alpha: 0,
-						onComplete: function():void {
-							obj.kill();
-						}
-					})
-				}
-			});
+			return _player;
 		}
 		
 	}

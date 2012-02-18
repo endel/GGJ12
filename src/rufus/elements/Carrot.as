@@ -1,6 +1,11 @@
 package rufus.elements 
 {
+	import com.greensock.easing.Quad;
+	import com.greensock.TweenLite;
+	import jframe.sound.SomManager;
+	import org.flixel.FlxG;
 	import org.flixel.FlxObject;
+	import org.flixel.FlxSprite;
 	import rufus.core.Game;
 	import rufus.core.GameObject;
 	
@@ -12,40 +17,48 @@ package rufus.elements
 	{
 		[Embed(source = "../../../res/cenoura.png")] 
 		private var bitmap:Class;
-				
-		private var _state : String;
-		
-		static public const STATE_PICK:String = "statePick";
-		static public const STATE_PICKED:String = "statePicked";
 		
 		public function Carrot()
 		{	
-			this.state = STATE_PICK;
 			offset.y = -6;
+			acceleration.y = Game.instance.accelerationY;
 			setStaticGraphic(bitmap, 65, 33);
+			allowCollisions = FlxObject.ANY;
 		}
 		
 		override public function update() : void {
-			if (_state == STATE_PICK) {
-				allowCollisions = FlxObject.ANY;
-				immovable = true;
-			} else {
-				allowCollisions = FlxObject.FLOOR;
-				immovable = false;
-				acceleration.y = Game.instance.accelerationY;
+			if (allowCollisions == FlxObject.ANY) {
+				FlxG.collide(Player.instance, this, onCollidePlayer);
 			}
 		}
 		
-		public function get state():String 
+		private function onCollidePlayer(p:FlxSprite, obj:FlxSprite) : void
 		{
-			return _state;
+			moves = false;
+			allowCollisions = FlxObject.FLOOR;
+			alive = false;
+			
+			Player.instance.lock();
+			Player.instance.play(Player.GET_ITEM);
+			
+			SomManager.playSound(SomManager.GET_CARROT,1 , .2);
+			
+			Game.instance.carrots += 1;
+			
+			TweenLite.to(obj, 0.5, { 
+				y: "-20", 
+				alpha: 50, 
+				ease: Quad.easeOut, 
+				onComplete: function() : void {
+					TweenLite.to(obj, 0.5, {
+						alpha: 0,
+						onComplete: function():void {
+							obj.kill();
+						}
+					})
+				}
+			});
 		}
-		
-		public function set state(value:String):void 
-		{
-			_state = value;
-		}
-		
 	}
 
 }

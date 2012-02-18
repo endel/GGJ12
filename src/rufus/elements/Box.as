@@ -1,5 +1,6 @@
 package rufus.elements 
 {
+	import org.flixel.FlxObject;
 	import rufus.core.GameObject;
 	/**
 	 * ...
@@ -8,9 +9,14 @@ package rufus.elements
 	public class Box extends GameObject
 	{
 		
-		public function Box() 
+		public function Box() { }
+		
+		override public function update():void 
 		{
-			
+			// 
+			if (!isTouching(FlxObject.FLOOR)) {
+				
+			}
 		}
 		
 	}

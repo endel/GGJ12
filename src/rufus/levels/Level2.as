@@ -17,7 +17,7 @@ package rufus.levels
 		
 		override public function setup() : void 
 		{
-			setPlayer(20, 400);
+			setPlayer(20, 300);
 			addElement(Mushroom, 950, 240);
 			//addElement(BoxWood,  498, 500);
 			//addElement(Carrot, 320, 340);

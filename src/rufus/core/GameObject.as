@@ -29,11 +29,6 @@ package rufus.core
 			this._level.add(this);
 		}
 		
-		override public function update() : void
-		{
-			super.update();
-		}
-		
 		protected function wrap(obj:FlxObject):void
 		{
 			obj.x = (obj.x + obj.width / 2 + FlxG.width) % FlxG.width - obj.width / 2;
